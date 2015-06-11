@@ -1,8 +1,21 @@
-from flask import Flask, request, render_template
-from flask.ext.sqlalchemy import SQLAlchemy
+#=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+# ** Renchon
+#------------------------------------------------------------------------------
+# Main module that creates the views, runs the database, and runs the app. Ok, 
+# it basically does it all.
+#=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+import os
 from datetime import datetime
+from flask import Flask, request, render_template, redirect, url_for
+from flask.ext.sqlalchemy import SQLAlchemy
+from werkzeug import secure_filename
+
+UPLOAD_FOLDER = 'static/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
 
 db = SQLAlchemy(app)
@@ -83,6 +96,24 @@ class Page(db.Model):
         return "<Page %r>" % (self.num)
         
 #===============================================================================
+# ** Helper Methods
+#===============================================================================
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1] in ALLOWED_EXTENSIONS
+    
+def save_file(file, url):
+  filename = secure_filename(file.filename)
+  directory = app.config['UPLOAD_FOLDER'] + url + "/"
+  # Make the directory in case it doesn't exist
+  if not os.path.exists(directory):
+      os.makedirs(directory)
+  complete_url = os.path.join(directory, filename)
+  # Then save the file to that directory
+  file.save(complete_url)
+  return complete_url
+        
+#===============================================================================
 # ** Views
 #===============================================================================
         
@@ -99,48 +130,56 @@ def admin():
     return render_template("admin.html", manga=manga_list)
                                     
 # Add Manga
-@app.route("/add_manga", methods=["GET", "POST"])
+@app.route("/add_manga", methods=["POST"])
 def add_manga():
     
-    if request.method == "POST":
-        
-        name = request.form["manga_name"]
-        url = request.form["manga_url"]
-        author = request.form["manga_author"]
-        artist = request.form["manga_artist"]
-        status = request.form["manga_status"]
-        cover = request.form["manga_cover"]
-        description = request.form["manga_description"]
-        
-        new_manga = Manga(name, url, author, artist, status, cover,
-                          description)
-                          
-        db.session.add(new_manga)
-        db.session.commit()
+    file = request.files["manga_cover"]
+    url = request.form["manga_url"]
+    
+    # Handle the case where there are conflicting manga urls
+    if os.path.exists(app.config['UPLOAD_FOLDER'] + url):
+        return render_template('admin.html', error="Manga URL already exists.")
+    
+    # Handle the case where the file is not sent
+    if not (file and allowed_file(file.filename)):
+        return render_template('admin.html', error="Invalid Cover File.")
+    
+    # Save the file to the server, and keep the filename in the database
+    cover_url = save_file(file, url)
+    
+    # Then, just dump the contents into the database
+    name = request.form["manga_name"]
+    author = request.form["manga_author"]
+    artist = request.form["manga_artist"]
+    status = request.form["manga_status"]
+    description = request.form["manga_description"]
+    new_manga = Manga(name, url, author, artist, status, cover_url, 
+        description)
+    
+    # Add and commit the new manga into the database
+    db.session.add(new_manga)
+    db.session.commit()
 
     return redirect(url_for("admin"))
     
 # Add Chapter
-@app.route("/add_chapter", methods=["GET", "POST"])
+@app.route("/add_chapter", methods=["POST"])
 def add_chapter():
+      
+    name = request.form["chapter_name"]
+    num = request.form["chapter_num"]
+    scangroup = request.form["chapter_scanalators"]
+    scangroup_url = request.form["chapter_scangroup_url"]
     
-    if request.method == "POST":
+    manga = request.form["chapter_manga"]
+    
+    new_chapter = Chapter(name, num, scangroup, scangroup_url, manga)
+    
+    db.session.add(new_chapter)
+    db.session.commit()
         
-        name = request.form["chapter_name"]
-        num = request.form["chapter_num"]
-        scangroup = request.form["chapter_scanalators"]
-        scangroup_url = request.form["chapter_scangroup_url"]
-        
-        manga = request.form["chapter_manga"]
-        
-        new_chapter = Chapter(name, num, scangroup, scangroup_url, manga)
-        
-        db.session.add(new_chapter)
-        db.session.commit()
-        
-    return redirect(url_for("admin"))
-        
-        
+    
+# Manga Upload Failed
     
 if __name__ == "__main__":
     app.run(debug=True)
