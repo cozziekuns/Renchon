@@ -120,8 +120,13 @@ def save_file(file, url):
 # Index
 @app.route("/")
 def index():
-    manga_list = map(lambda x: x.name, Manga.query.all())
-    return render_template("index.html", manga=manga_list)
+    manga_list = []
+    cover_urls = {}
+    for manga in Manga.query.all():
+        manga_list.append(manga.name)
+        cover_urls[manga.name] = manga.cover
+    return render_template("index.html", manga_list=manga_list, 
+                            cover_urls=cover_urls)
 
 # Admin
 @app.route("/admin")

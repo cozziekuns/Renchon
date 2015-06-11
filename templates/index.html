@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-    {% for name in manga %}
-    <div><p>{{ name }}</p></div>
+    {% for manga in manga_list %}
+      <div><p>{{ manga }}</p></div>
+      <div><p><img src={{ cover_urls[manga] }}></img></p></div>
     {% endfor %}
 {% endblock %}
