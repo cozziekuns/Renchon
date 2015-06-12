@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <script src="/static/renchon.js"></script>
+  
+  <script type="text/javascript">
+    last_page = {{ last_page }};
+    page_urls = {{ urls|tojson|safe }};
+  </script>
+  
+  <div id="fullscreen">
+    <img id="manga" src="{{ urls[0] }}">
+  </div>
+{% endblock %}

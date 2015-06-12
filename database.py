@@ -13,7 +13,7 @@ if os.path.exists(file_path):
     os.remove(file_path)
   
 # Make new database
-file = open('reader.db', 'w+')
+file = open(file_path, 'w+')
 file.close()
   
 db.create_all()

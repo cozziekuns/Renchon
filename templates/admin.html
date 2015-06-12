@@ -43,7 +43,7 @@
       
     </form>
     
-    <form action={{ url_for("add_chapter") }} method=post class=add-chapter>
+    <form class=add-chapter action={{ url_for("add_chapter") }} method=post enctype=multipart/form-data>
       
       <fieldset>
       <legend>Add Chapter</legend>
@@ -60,6 +60,9 @@
       
       <label for="url">Chapter Number: </label>
       <input type="text" id="url" name="chapter_num" size=25 required><br><br>
+      
+      <label for="page">Upload Page Folder: </label>
+      <input type="file" id="page" name="chapter_pages" webkitdirectory mozdirectory accept="image/*" required><br>
       
       <input type="submit" value="Submit">
       </fieldset>
