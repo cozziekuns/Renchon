@@ -128,7 +128,7 @@ def save_file(file, url, filename=None):
 #===============================================================================
         
 # Index
-@app.route("/")
+@app.route("/reader/")
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
@@ -149,13 +149,13 @@ def index():
                             cover_urls=cover_urls, chapters=chapters)
 
 # Admin
-@app.route("/admin")
+@app.route("/reader/admin")
 def admin():
     manga_list = map(lambda x: x.name, Manga.query.all())
     return render_template("admin.html", manga=manga_list)
                                     
 # Add Manga
-@app.route("/add_manga", methods=["POST"])
+@app.route("/reader/add_manga", methods=["POST"])
 def add_manga():
     name = request.form["manga_name"]
     url = request.form["manga_url"]
@@ -193,7 +193,7 @@ def add_manga():
     return redirect(url_for("admin"))
     
 # Add Chapter
-@app.route("/add_chapter", methods=["POST"])
+@app.route("/reader/add_chapter", methods=["POST"])
 def add_chapter():
   
     name = request.form["chapter_name"]
