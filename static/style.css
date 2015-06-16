@@ -4,6 +4,11 @@
 	background-color: rgba(160, 160, 160, 160);
 }
 
+#fullscreen:-moz-full-screen {
+	background-color: rgba(160, 160, 160, 160);
+}
+
+
 img#manga {
 	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
 	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
