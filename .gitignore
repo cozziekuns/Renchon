@@ -59,5 +59,6 @@ target/
 # SQL Databases
 *.db
 
-# Static
-/static
+# Static Images
+*.png
+*.jpg

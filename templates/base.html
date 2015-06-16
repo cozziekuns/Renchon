@@ -1,12 +1,22 @@
 <html>
+
   <head>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script 
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+    </script>
+    <link rel="shortcut icon" 
+        href="{{ url_for('static', filename='favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" 
+        href="{{ url_for('static', filename = 'style.css') }}" />
     <title>Renge</title>
   </head>
+  
   <body>
     <div>Things will go here one day.</div>
     <hr>
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
   </body>
+  
 </html>
 		
