@@ -124,7 +124,7 @@ function center_image() {
   
   document.getElementById("fullscreen").style.padding = "0px";
   
-  manga_image.onclick = null;
+  manga_image.onclick = next_page;
   manga_image.onmousedown = start_pan;
   manga_image.onmousemove = process_pan;
   manga_image.onmouseup = end_pan;
