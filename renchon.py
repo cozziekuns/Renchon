@@ -271,6 +271,14 @@ def view_page(manga=None, chapter=None):
         return render_template("404.html"), 404
         
     last_page = chapter.pages.order_by("-num").first()
+  
+    # TODO: change this to the last ten chapters counting from the position 
+    # of the current chapter.
+    
+    # Get the last ten chapters (or upto 10)
+    chapters = manga.chapters.order_by("-num").limit(10).all();
+    chapters = map(lambda x: [chapter_to_string(x.num), x.name, 
+        chapter_to_string(x.num)], chapters)
         
     # Not going to do this in JS
     num_string = chapter_to_string(chapter_num)
@@ -278,7 +286,8 @@ def view_page(manga=None, chapter=None):
     
     return render_template("reader.html", manga=manga.name, 
                           chapter_name=chapter.name, chapter_num=num_string, 
-                          urls=urls, last_page=last_page.num)
+                          urls=urls, last_page=last_page.num, 
+                          chapters=chapters)
 
 # Page Not Found
 @app.errorhandler(404)

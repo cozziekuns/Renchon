@@ -98,10 +98,6 @@ ul#subnav_list li#subnav_dropdown ul {
 	background-color: white;
 }
 
-ul#subnav_list li#subnav_dropdown ul#dropdown_page {
-	width: 100px;
-}
-
 ul#subnav_list li#subnav_dropdown ul li {
 	display: block;
 	padding: 8px;

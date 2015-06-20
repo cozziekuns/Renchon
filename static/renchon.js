@@ -314,7 +314,7 @@ function goto_page(page) {
     window.scrollTo(0, 0);
   }
   
-  document.getElementById("page_num").innerHTML = curr_page.toString();
+  update_navbar_page()
 
 }
 
@@ -331,5 +331,31 @@ function previous_page() {
   if (curr_page > 1) {
     goto_page(curr_page - 1);
   }
+  
+}
+
+function update_navbar_page() {
+  
+  dropdown = document.getElementById("dropdown_page")
+  document.getElementById("page_num").innerHTML = curr_page.toString();
+  
+  start_page = Math.max(curr_page - 3, 2)
+  end_page = Math.min(curr_page + 3, last_page - 1)
+  
+  dropdown.innerHTML = "";
+  
+  // First Page
+  dropdown.innerHTML += "<a href='#' onclick='goto_page(1)'>" + 
+      "<li>Page 1 (First)</li></a>"; 
+  
+  for (i = start_page; i <= end_page; i++) {
+    dropdown.innerHTML += "<a href='#' onclick='goto_page(" + i.toString() + 
+        ")'>" + "<li>Page " + i.toString() + "</li></a>"; 
+  }
+  
+  // And Last Page
+  dropdown.innerHTML += 
+      "<a href='#' onclick='goto_page(" + last_page.toString() + 
+      ")'>" + "<li>Page " + last_page.toString() + " (Last)</li></a>"; 
   
 }
