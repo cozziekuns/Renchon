@@ -1,10 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
   
+  <!-- <div id="subnav"> -->
+  
+    <a id="prev_page" href="#" onclick="previous_page()">
+      <span class="subnav_button subnav_prev">« Previous</span>
+    </a>
+    
+    <a id="next_page" href="#" onclick="next_page()">
+      <span class="subnav_button subnav_next">Next »</span>
+    </a>
+    
+    <span class="subnav_center">
+      <ul id="subnav_list">
+        <li id="subnav_title">{{ manga }}</li>
+        <li id="subnav_divider">|</li>
+        <li id="subnav_dropdown">
+          Chapter {{ chapter_num }}: {{ chapter_name }} ▾
+          <ul>
+            <a href="#"><li>Test</li></a>
+            <a href="#"><li>Test</li></a>
+            <a href="#"><li>Test</li></a>
+            <a href="#"><li>Test</li></a>
+            <a href="#"><li>Test</li></a>
+          </ul>
+        </li>
+        <li></li>
+        <li id="subnav_dropdown">
+          Page <span id="page_num">1</span> ▾
+          <ul id="dropdown_page">
+            <a href="#"><li>Page 2</li></a>
+            <a href="#"><li>Page 3</li></a>
+            <a href="#"><li>Page 4</li></a>
+          </ul>
+        </li>
+        <li><a href="#"><span class="subnav_button">Download</span></a></li>
+      </ul>
+    </span>
+    
+  <!--  </div> -->
+  
+  <hr id="divider">
+  
   <div id="fullscreen">
     <img id="manga" src="{{ urls[0] }}" onclick="launch_fullscreen()" 
          ondragstart="return false">
   </div>
+  
+  <!-- Load the script after the images have been loaded -->
   
   <script src="/static/renchon.js"></script>
   

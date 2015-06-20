@@ -277,7 +277,7 @@ def view_page(manga=None, chapter=None):
     urls = list(map(lambda x: "/" + x.image, chapter.pages.all()))
     
     return render_template("reader.html", manga=manga.name, 
-                          chapter_name=chapter.name, chapter_num=chapter.num, 
+                          chapter_name=chapter.name, chapter_num=num_string, 
                           urls=urls, last_page=last_page.num)
 
 # Page Not Found

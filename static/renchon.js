@@ -122,11 +122,14 @@ function launch_fullscreen() {
 
 function center_image() {
   
+  document.getElementById("fullscreen").style.padding = "0px";
+  
   manga_image.onclick = null;
   manga_image.onmousedown = start_pan;
   manga_image.onmousemove = process_pan;
   manga_image.onmouseup = end_pan;
   manga_image.onmouseout = end_pan;
+  manga_image.style.maxWidth = "initial";
   
   resize_image();
   
@@ -137,16 +140,19 @@ function center_image() {
 
 function revert_image() {
   
+  document.getElementById("fullscreen").style.padding = "32px";
+  
   manga_image.onclick = launch_fullscreen;
   manga_image.onmousedown = null;
   manga_image.onmousemove = null;
   manga_image.onmouseup = null;
   manga_image.onmouseout = null;
   
-  manga_image.style.marginLeft = "initial";
-  manga_image.style.marginTop = "initial";
-  manga_image.style.width = "initial";
+  manga_image.style.marginLeft = "auto";
+  manga_image.style.marginTop = "auto";
   manga_image.style.height = "initial";
+  manga_image.style.width = "initial";
+  manga_image.style.maxWidth = "80%";
   
 }
 
@@ -305,6 +311,8 @@ function goto_page(page) {
   if (fullscreen_enabled) {
     center_image();
   }
+  
+  document.getElementById("page_num").innerHTML = curr_page.toString();
 
 }
 
