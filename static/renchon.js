@@ -310,6 +310,8 @@ function goto_page(page) {
   
   if (fullscreen_enabled) {
     center_image();
+  } else {
+    window.scrollTo(0, 0);
   }
   
   document.getElementById("page_num").innerHTML = curr_page.toString();
