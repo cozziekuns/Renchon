@@ -122,6 +122,36 @@ def save_file(file, url, filename=None):
   # Then save the file to that directory
   file.save(complete_url)
   return complete_url
+  
+def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
+    # If there is no chapter before, just insert an extra chapter at the top
+    chapter_limit = 7
+    if not chapter_before:
+        chapter_limit += 1
+  
+    # Recreate the list based on the position of the chapter we're currently
+    # on
+    if len(chapter_list) > chapter_limit:
+        temp = []
+        chapter_list.reverse()
+        for item in chapter_list:
+            temp.insert(0, item)
+            if len(temp) == chapter_limit:
+                break
+        chapter_list = temp
+        
+    # Add the latest chapter
+    chapter_list.insert(0, [chapter_to_string(latest_chapter.num), 
+        latest_chapter.name + " (Latest)"])
+        
+    # Add the chapter before this chapter, unless this chapter is the earliest
+    # chapter
+    if chapter_before:
+        info = [chapter_to_string(chapter_before.num), chapter_before.name]
+        if not info in chapter_list:
+            chapter_list.append(info)
+            
+    return chapter_list
         
 #===============================================================================
 # ** Views
@@ -271,30 +301,44 @@ def view_page(manga=None, chapter=None):
         return render_template("404.html"), 404
         
     last_page = chapter.pages.order_by("-num").first()
-  
-    # TODO: change this to the last ten chapters counting from the position 
-    # of the current chapter.
     
-    # Get the last ten chapters (or upto 10)
-    chapters = manga.chapters.order_by("-num").limit(10).all();
-    chapters = map(lambda x: [chapter_to_string(x.num), x.name, 
-        chapter_to_string(x.num)], chapters)
-        
     # Not going to do this in JS
     num_string = chapter_to_string(chapter_num)
     urls = list(map(lambda x: "/" + x.image, chapter.pages.all()))
     
+    chapters = manga.chapters.order_by("-num").all()
+    chapter_list = []
+    latest_chapter = chapters[0]
+    
+    # Find the chapter before this one, unless this is the last chapter
+    if chapters.index(chapter) == len(chapters) - 1:
+        chapter_before = None
+    else:
+        chapter_before = chapters[chapters.index(chapter) + 1]
+        
+    # List automatically contains the most updated chapter
+    contains_chapter = (chapter == latest_chapter)
+    
+    for item in chapters[1:]:
+        chapter_list.append([chapter_to_string(item.num), item.name])
+        # Set the flag to true if the list contains the chapter
+        if item.num == chapter_num:
+            contains_chapter = True
+        if (len(chapter_list) >= 7 and contains_chapter):
+            break
+            
+    chapter_list = recreate_chapter_list(chapter_list, chapter_before, 
+        latest_chapter)
+    
     return render_template("reader.html", manga=manga.name, 
                           chapter_name=chapter.name, chapter_num=num_string, 
                           urls=urls, last_page=last_page.num, 
-                          chapters=chapters)
+                          chapters=chapter_list)
 
 # Page Not Found
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
-        
-# Manga Upload Failed
     
 if __name__ == "__main__":
     app.run(debug=True)

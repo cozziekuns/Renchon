@@ -85,10 +85,6 @@ ul#subnav_list li#subnav_dropdown:hover {
 	background-color: rgba(216, 216, 216, 255);
 }
 
-ul#subnav_list li#subnav_dropdown:hover > ul {
-	display: block;
-}
-
 ul#subnav_list li#subnav_dropdown ul {
 	display: none;
 	margin: 8 0 0 -9px;
@@ -96,6 +92,10 @@ ul#subnav_list li#subnav_dropdown ul {
 	position: absolute;
 	border: 1px solid rgba(160, 160, 160, 255);
 	background-color: white;
+}
+
+ul#subnav_list li#subnav_dropdown:hover ul {
+	display: block;
 }
 
 ul#subnav_list li#subnav_dropdown ul li {

@@ -19,7 +19,7 @@
           Chapter {{ chapter_num }}: {{ chapter_name }} ▾
           <ul>
             {% for chapter in chapters %}
-              <a href="{{ chapter[2] }}">
+              <a href="{{ chapter[0] }}">
                 <li>Chapter {{ chapter[0] }}: {{ chapter[1] }}</li>
               </a>
             {% endfor %}

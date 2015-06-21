@@ -314,7 +314,8 @@ function goto_page(page) {
     window.scrollTo(0, 0);
   }
   
-  update_navbar_page()
+  
+  update_navbar_page();
 
 }
 
@@ -340,7 +341,16 @@ function update_navbar_page() {
   document.getElementById("page_num").innerHTML = curr_page.toString();
   
   start_page = Math.max(curr_page - 3, 2)
-  end_page = Math.min(curr_page + 3, last_page - 1)
+  
+  if (start_page == 2) {
+    end_page = Math.min(8, last_page - 1)
+  } else {
+    end_page = Math.min(curr_page + 3, last_page - 1)
+  }
+  
+  if (end_page == last_page - 1) {
+    start_page = Math.max(last_page - 1 - 6, 2);
+  }
   
   dropdown.innerHTML = "";
   
@@ -356,6 +366,6 @@ function update_navbar_page() {
   // And Last Page
   dropdown.innerHTML += 
       "<a href='#' onclick='goto_page(" + last_page.toString() + 
-      ")'>" + "<li>Page " + last_page.toString() + " (Last)</li></a>"; 
+      ")'>" + "<li>Page " + last_page.toString() + " (Last)</li></a>";
   
 }
