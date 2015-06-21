@@ -166,8 +166,9 @@ function resize_image() {
       if (cache[curr_page - 1].height > screen.height) {
         // Clamp the height to the height of the screen, and resize the width
         // of the image to keep the ratio steady
-        height_ratio = screen.height / cache[curr_page - 1].height
-        manga_image.style.width = cache[curr_page - 1].width * height_ratio;
+        height_ratio = screen.height / cache[curr_page - 1].height;
+        width_num = (cache[curr_page - 1].width * height_ratio);
+        manga_image.style.width = width_num.toString() + "px";
         manga_image.style.height = screen.height.toString() + "px";
       } else {
         // Otherwise, do nothing.
@@ -177,8 +178,9 @@ function resize_image() {
     } else {
       // Portrait 
       width_ratio = screen.width / cache[curr_page].width;
+      height_num = cache[curr_page - 1].height * width_ratio;
       manga_image.style.width = screen.width.toString() + "px";
-      manga_image.style.height = cache[curr_page - 1].height * width_ratio;
+      manga_image.style.height = height_num.toString() + "px";
     }
   } else {
     manga_image.style.width = cache[curr_page - 1].width.toString() + "px";
