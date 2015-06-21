@@ -171,8 +171,8 @@ function resize_image() {
         manga_image.style.height = screen.height.toString() + "px";
       } else {
         // Otherwise, do nothing.
-        manga_image.style.width = cache[curr_page - 1].width;
-        manga_image.style.height = cache[curr_page - 1].height;
+        manga_image.style.width = cache[curr_page - 1].width.toString() + "px";
+        manga_image.style.height = cache[curr_page - 1].height.toString() + "px";
       }
     } else {
       // Portrait 
@@ -181,8 +181,8 @@ function resize_image() {
       manga_image.style.height = cache[curr_page - 1].height * width_ratio;
     }
   } else {
-    manga_image.style.width = cache[curr_page - 1].width;
-    manga_image.style.height = cache[curr_page - 1].height;
+    manga_image.style.width = cache[curr_page - 1].width.toString() + "px";
+    manga_image.style.height = cache[curr_page - 1].height.toString() + "px";
   }
   
 }

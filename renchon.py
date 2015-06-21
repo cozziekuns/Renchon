@@ -163,7 +163,7 @@ def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
 #===============================================================================
         
 # Index
-@app.route("/reader/")
+@app.route("/reader")
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
