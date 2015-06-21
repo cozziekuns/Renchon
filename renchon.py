@@ -6,6 +6,8 @@
 #=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 import os
+import shutil
+
 from datetime import datetime
 from flask import Flask, request, render_template, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -111,17 +113,20 @@ def chapter_to_string(chapter_num):
     return num_string
     
 def save_file(file, url, filename=None):
-  if filename is None:
-      filename = file.filename
-  filename = secure_filename(filename)
-  directory = app.config['UPLOAD_FOLDER'] + url + "/"
-  # Make the directory in case it doesn't exist
-  if not os.path.exists(directory):
-      os.makedirs(directory)
-  complete_url = os.path.join(directory, filename)
-  # Then save the file to that directory
-  file.save(complete_url)
-  return complete_url
+    if filename is None:
+        filename = file.filename
+    filename = secure_filename(filename)
+    directory = app.config['UPLOAD_FOLDER'] + url + "/"
+    # Make the directory in case it doesn't exist
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    complete_url = os.path.join(directory, filename)
+    # Then save the file to that directory
+    file.save(complete_url)
+    return complete_url
+  
+def delete_directory(url):
+    shutil.rmtree(app.config['UPLOAD_FOLDER'] + url)
   
 def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
     # If there is no chapter before, just insert an extra chapter at the top
@@ -181,8 +186,12 @@ def index():
 # Admin
 @app.route("/reader/admin")
 def admin():
-    manga_list = map(lambda x: x.name, Manga.query.all())
-    return render_template("admin.html", manga=manga_list)
+    manga = Manga.query.all()
+    manga_list = list(map(lambda x: x.name, manga))
+    chapter_list = list(map(lambda x: list(map(lambda y: [y.name, y.num], 
+        x.chapters.all())), manga))
+    return render_template("admin.html", manga=manga_list, 
+        chapter_list=chapter_list)
                                     
 # Add Manga
 @app.route("/reader/add_manga", methods=["POST"])
@@ -225,7 +234,6 @@ def add_manga():
 # Add Chapter
 @app.route("/reader/add_chapter", methods=["POST"])
 def add_chapter():
-  
     name = request.form["chapter_name"]
     num = 0
     
@@ -259,6 +267,23 @@ def add_chapter():
         curr_page += 1
     
     db.session.add(new_chapter)
+    db.session.commit()
+    
+    return redirect(url_for("admin"))
+    
+# Delete Chapter
+@app.route("/reader/delete_chapter", methods=["POST"])
+def delete_chapter():
+    manga = Manga.query.filter_by(
+        name=request.form["chapter_delete_manga"]).first()
+    chapter = manga.chapters.filter_by(
+      num=request.form["chapter_delete_chapter"]).first()
+      
+    num_string = chapter_to_string(chapter.num)
+    url = chapter.manga.url + "/Chapter_" + num_string 
+    delete_directory(url)
+    
+    db.session.delete(chapter)
     db.session.commit()
     
     return redirect(url_for("admin"))
