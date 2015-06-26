@@ -2,3 +2,10 @@
 Full Reader/Admin Controls.
 
 Not intended for mobile use.
+
+### Install
+1. pip install flask
+2. pip install flask-sqlalchemy
+3. python database.py
+
+You should now be running a thing.
