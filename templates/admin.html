@@ -1,98 +1,113 @@
 {% extends "layout.html" %}
 {% block startbody %}
-  
+
     {% if error %}
       <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
-  
-    <form class=add-manga action={{ url_for("add_manga") }} method=post enctype=multipart/form-data>
-      
+
+    <form class=add-manga action={{ url_for("add_manga") }} method=post
+        enctype=multipart/form-data>
+
       <fieldset>
       <legend>Add Manga</legend>
       <label for="name">Manga Name: </label>
       <input type="text" id="name" name="manga_name" size=30 required><br>
-      
+
       <label for="url">URL: </label>
       <input type="text" id="url" name="manga_url" size=30 required><br>
-      
+
       <label for="author">Author: </label>
       <input type="text" id="author" name="manga_author" size=30 required><br>
-      
+
       <label for="artist">Arist: </label>
       <input type="text" id="artist" name="manga_artist" size=30 required><br>
-      
+
       <label for="status">Status: </label>
       <select id="status" name="manga_status">
         <option value="in_progress">In Progress</option>
         <option value="on_hold">On Hold</option>
         <option value="complete">Completed</option>
       </select>
+
       <br>
+
       <label for="cover">Cover: </label>
-      <input type="file" id="cover" name="manga_cover" accept="image/*" required><br>
-      
+      <input type="file" id="cover" name="manga_cover" accept="image/*"
+          required>
+          
+      <br>
+
       <label for="description">Description: </label>
-      <textarea cols="80" rows="10" name="manga_description" required></textarea><br><br>
-      
+      <textarea cols="80" rows="10" name="manga_description" required>
+      </textarea>
+
+      <br><br>
+
       <input type="submit" value="Submit">
       </fieldset>
-      
+
     </form>
-    
-    <form class=add-chapter action={{ url_for("add_chapter") }} method=post enctype=multipart/form-data>
-      
+
+    <form class=add-chapter action={{ url_for("add_chapter") }} method=post
+        enctype=multipart/form-data>
+
       <fieldset>
       <legend>Add Chapter</legend>
-      
+
       <label for="manga">Manga: </label>
       <select id="manga" name="chapter_manga">
       {% for name in manga %}
         <option value="{{ name }}">{{ name }}</option>
       {% endfor %}
       </select>
+
       <br>
+
       <label for="name">Chapter Name: </label>
       <input type="text" id="name" name="chapter_name" size=25 required><br>
-      
+
       <label for="url">Chapter Number: </label>
       <input type="text" id="url" name="chapter_num" size=25 required><br><br>
-      
+
       <label for="page">Upload Page Folder: </label>
-      <input type="file" id="page" name="chapter_pages" webkitdirectory mozdirectory accept="image/*" required><br>
-      
+      <input type="file" id="page" name="chapter_pages" webkitdirectory
+          mozdirectory accept="image/*" required>
+      <br>
+
       <input type="submit" value="Submit">
       </fieldset>
-      
+
     </form>
-    
-    <form class=delete-chapter action={{ url_for("delete_chapter") }} method=post>
-      
+
+    <form class=delete-chapter action={{ url_for("delete_chapter") }}
+        method=post>
+
       <fieldset>
       <legend>Delete Chapter</legend>
-      
+
       <label for="manga_delete">Manga: </label>
-      <select id="manga_delete" name="chapter_delete_manga" 
+      <select id="manga_delete" name="chapter_delete_manga"
           onchange="create_chapter_select()">
       {% for name in manga %}
         <option value="{{ name }}">{{ name }}</option>
       {% endfor %}
       </select>
       <br>
-      
+
       <label for="chapter_delete">Chapter: </label>
       <select id="chapter_delete" name="chapter_delete_chapter"></select>
       <br>
-      
+
       <input type="submit" value="Submit">
       </fieldset>
-      
+
     </form>
-    
+
     <script src="/static/admin.js"></script>
-  
+
     <script type="text/javascript">
       chapters = {{ chapter_list|tojson|safe }};
       create_chapter_select();
     </script>
-    
+
 {% endblock %}
