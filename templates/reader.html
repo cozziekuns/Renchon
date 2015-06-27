@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-  
+
   <!-- <div id="subnav"> -->
-  
+
     <a id="prev_page" href="#" onclick="previous_page()">
       <span class="subnav_button subnav_prev">« Previous</span>
     </a>
-    
+
     <a id="next_page" href="#" onclick="next_page()">
       <span class="subnav_button subnav_next">Next »</span>
     </a>
-    
+
     <span class="subnav_center">
       <ul id="subnav_list">
         <li id="subnav_title">{{ manga }}</li>
@@ -39,25 +39,25 @@
         <li><a href="#"><span class="subnav_button">Download</span></a></li>
       </ul>
     </span>
-    
+
   <!--  </div> -->
-  
+
   <hr id="divider">
-  
+
   <div id="fullscreen">
-    <img id="manga" src="{{ urls[0] }}" onclick="launch_fullscreen()" 
+    <img id="manga" src="{{ urls[0] }}" onclick="launch_fullscreen()"
          ondragstart="return false">
   </div>
-  
+
   <!-- Load the script after the images have been loaded -->
-  
+
   <script src="/static/renchon.js"></script>
-  
+
   <script type="text/javascript">
+    next_chapter = {{ next_chapter }};
     last_page = {{ last_page }};
     page_urls = {{ urls|tojson|safe }};
-    preload();
-    update_navbar_page();
+    goto_page(1);
   </script>
-  
+
 {% endblock %}
