@@ -1,50 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <!-- <div id="subnav"> -->
+  <div id="subnav">
 
-    <a id="prev_page" href="#" onclick="previous_page()">
-      <span class="nav_button subnav subnav_prev">« Previous</span>
-    </a>
+    <ul class="navbar_list subnav_ul">
 
-    <a id="next_page" href="#" onclick="next_page()">
-      <span class="nav_button subnav subnav_next">Next »</span>
-    </a>
+      <li class="subnav_prev">
+        <a id="prev_page" href="#" onclick="previous_page()">
+          <span class="nav_button subnav">« Previous</span>
+        </a>
+      </li>
 
-    <span class="subnav_center">
-      <ul class="navbar_list" id="subnav_list">
-        <li id="subnav_title">{{ manga }}</li>
-        <li id="subnav_divider">|</li>
-        <li id="subnav_dropdown">
-          Chapter {{ chapter_num }}: {{ chapter_name }} ▾
-          <ul>
-            {% for chapter in chapters %}
-              <a href="{{ chapter[0] }}">
-                <li>Chapter {{ chapter[0] }}: {{ chapter[1] }}</li>
-              </a>
-            {% endfor %}
-          </ul>
-        </li>
-        <li></li>
-        <li id="subnav_dropdown">
-          Page <span id="page_num">1</span> ▾
-          <ul id="dropdown_page">
-            <a href="#"><li>Page 1</li></a>
-            <a href="#"><li>Page 2</li></a>
-            <a href="#"><li>Page 3</li></a>
-            <a href="#"><li>Page 4</li></a>
-            <a href="#"><li>Page 5</li></a>
-          </ul>
-        </li>
-        <li>
-          <a href="#"><span class="nav_button subnav">Download</span></a>
-        </li>
-      </ul>
-    </span>
+      <li>
+        <ul class="navbar_list subnav_ul" id="subnav_list">
+          <li id="subnav_title">{{ manga }}</li>
+          <li id="subnav_divider">|</li>
+          <li id="subnav_dropdown">
+            Chapter {{ chapter_num }}: {{ chapter_name }} ▾
+            <ul>
+              {% for chapter in chapters %}
+                <a href="{{ chapter[0] }}">
+                  <li>Chapter {{ chapter[0] }}: {{ chapter[1] }}</li>
+                </a>
+              {% endfor %}
+            </ul>
+          </li>
+          <li></li>
+          <li id="subnav_dropdown">
+            Page <span id="page_num">1</span> ▾
+            <ul id="dropdown_page">
+              <a href="#"><li>Page 1</li></a>
+              <a href="#"><li>Page 2</li></a>
+              <a href="#"><li>Page 3</li></a>
+              <a href="#"><li>Page 4</li></a>
+              <a href="#"><li>Page 5</li></a>
+            </ul>
+          </li>
+          <li>
+            <a href="#"><span class="nav_button subnav">Download</span></a>
+          </li>
+        </ul>
+      </li>
 
-  <!--  </div> -->
+      <li class="subnav_next">
+        <a id="next_page" href="#" onclick="next_page()">
+          <span class="nav_button subnav">Next »</span>
+        </a>
+      </li>
 
-  <hr id="divider">
+    </ul>
+
+  </div>
 
   <div id="fullscreen">
     <img id="manga" src="{{ urls[0] }}" onclick="launch_fullscreen()"

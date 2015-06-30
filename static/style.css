@@ -4,16 +4,6 @@ body {
 	font-family: "Open Sans", arial, sans-serif;
 }
 
-hr {
-  height: 5px;
-  border: 0;
-  box-shadow: inset 0 5px 5px -5px rgba(0, 0, 0, 0.75);
-}
-
-hr#divider {
-	margin-bottom: -5px;
-}
-
 a:link, a:visited {
 	text-decoration: none;
 	color: rgba(95, 154, 208, 255);
@@ -72,7 +62,6 @@ div#fullscreen {
 /* Navigaton Bar Layout */
 
 div#navbar {
-	margin-bottom: 12px;
 	background-color: rgba(96, 96, 96, 255);
 }
 
@@ -86,15 +75,20 @@ ul#navbar_right {
 	float: right;
 }
 
+.navbar_list {
+	text-align: center;
+	-webkit-padding-start: 0px;
+}
+
 .navbar_list li {
-	display: inline-table;
+	display: inline-block;
 	list-style-type: none;
 }
 
 .navbar_title {
 	padding: 16px 32px 16px 32px;
-	margin-right: -5px;
 	color: rgba(255, 255, 255, 255);
+	margin-right: -5px;
 	background-color: rgba(158, 61, 80, 255);
 }
 
@@ -103,7 +97,6 @@ ul#navbar_right {
 .nav_button {
 	text-align: center;
 	padding: 8px 10px;
-	margin-top: 10px;
 }
 
 .nav_button:hover {
@@ -121,28 +114,32 @@ ul#navbar_right {
 	color: rgba(224, 96, 0, 255);
 }
 
+/* Sub-nav Bar Layout */
+
+#subnav {
+	background-color: rgba(255, 255, 255, 255);
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
 /* Sub-nav Bar Buttons */
 
 .subnav {
 	display: inline-block;
-	margin-left: 16px;
-	margin-right: 16px;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 .subnav_prev {
-  float: left;
-	margin-top: 4px;
+	float: left;
 }
 
 .subnav_next {
   float: right;
-	margin-top: 4px;
 }
 
-.subnav_center {
-	display: block;
-  text-align: center;
-  width: auto;
+.subnav_ul {
+	-webkit-margin-before: 0;
+  -webkit-margin-after: 0;
 }
 
 li#subnav_divider {
@@ -150,10 +147,6 @@ li#subnav_divider {
 }
 
 /* Dropdown */
-
-ul#subnav_list {
-	margin-top: -6px;
-}
 
 ul#subnav_list li {
 	padding-right: 20px;
