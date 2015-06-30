@@ -1,8 +1,25 @@
 {% extends "layout.html" %}
 {% block startbody %}
-  <div>Things will go here one day.</div>
-  <hr>
+  <div id="navbar">
+    <ul class="navbar_list main_nav_list" id="navbar_left">
+      <li><span class="navbar_title">Renge</span></li>
+      <li>
+        <a href="{{ url_for("index") }}">
+          <span class="nav_button main_nav">Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#"><span class="nav_button main_nav">Manga List</span></a>
+      </li>
+    </ul>
+    <ul class="navbar_list main_nav_list" id="navbar_right">
+      <li>
+        <input id="searchbox" name="search" type="text" placeholder="Search">
+        <input id="search_submit" type="submit" value="Submit">
+      </li>
+      <li><a href="#"><span class="nav_button main_nav">Login</span></a></li>
+    </ul>
+  </div>
   {% block content %}
   {% endblock %}
 {% endblock %}
-		

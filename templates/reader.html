@@ -4,15 +4,15 @@
   <!-- <div id="subnav"> -->
 
     <a id="prev_page" href="#" onclick="previous_page()">
-      <span class="subnav_button subnav_prev">« Previous</span>
+      <span class="nav_button subnav subnav_prev">« Previous</span>
     </a>
 
     <a id="next_page" href="#" onclick="next_page()">
-      <span class="subnav_button subnav_next">Next »</span>
+      <span class="nav_button subnav subnav_next">Next »</span>
     </a>
 
     <span class="subnav_center">
-      <ul id="subnav_list">
+      <ul class="navbar_list" id="subnav_list">
         <li id="subnav_title">{{ manga }}</li>
         <li id="subnav_divider">|</li>
         <li id="subnav_dropdown">
@@ -36,7 +36,9 @@
             <a href="#"><li>Page 5</li></a>
           </ul>
         </li>
-        <li><a href="#"><span class="subnav_button">Download</span></a></li>
+        <li>
+          <a href="#"><span class="nav_button subnav">Download</span></a>
+        </li>
       </ul>
     </span>
 
