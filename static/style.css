@@ -72,7 +72,7 @@ div#fullscreen {
 /* Navigaton Bar Layout */
 
 div#navbar {
-	margin-bottom: 16px;
+	margin-bottom: 12px;
 	background-color: rgba(96, 96, 96, 255);
 }
 
@@ -131,10 +131,12 @@ ul#navbar_right {
 
 .subnav_prev {
   float: left;
+	margin-top: 4px;
 }
 
 .subnav_next {
   float: right;
+	margin-top: 4px;
 }
 
 .subnav_center {
@@ -148,6 +150,10 @@ li#subnav_divider {
 }
 
 /* Dropdown */
+
+ul#subnav_list {
+	margin-top: -6px;
+}
 
 ul#subnav_list li {
 	padding-right: 20px;
