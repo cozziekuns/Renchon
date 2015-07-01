@@ -162,34 +162,13 @@ def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
 # ** Views
 #===============================================================================
 
-# Index
-@app.route("/reader")
-def index():
-    # Get all of the things to be displayed in this view
-    manga_list = []
-    cover_urls = {}
-    chapters = {}
-    # Iterate through all the manga in the database (eventually this will be
-    # shortened to the first 50 chapters or so...)
-    for manga in Manga.query.all():
-        # Filler
-        manga_list.append(manga.name)
-        cover_urls[manga.name] = manga.cover
-        newest_chapter = manga.chapters.order_by("-id").first()
-        if newest_chapter:
-            chapters[manga.name] = newest_chapter.name
-        else:
-            chapters[manga.name] = ""
-    return render_template("index.html", manga_list=manga_list,
-                            cover_urls=cover_urls, chapters=chapters)
-
 # Admin
 @app.route("/reader/admin")
 def admin():
-    manga = Manga.query.all()
+    manga = Manga.query.order_by("last_updated desc").all()
     manga_list = list(map(lambda x: x.name, manga))
     chapter_list = list(map(lambda x: list(map(lambda y: [y.name, y.num],
-        x.chapters.all())), manga))
+        x.chapters.order_by("num desc").all())), manga))
     return render_template("admin.html", manga=manga_list,
         chapter_list=chapter_list)
 
@@ -266,6 +245,9 @@ def add_chapter():
         # Remember to increment curr_page
         curr_page += 1
 
+    # Manga has been updated, so update the last updated date
+    manga.last_updated = datetime.utcnow()
+
     db.session.add(new_chapter)
     db.session.commit()
 
@@ -302,12 +284,45 @@ def view_manga(manga=None):
 
     return render_template("manga.html", manga=manga)
 
+# Index
+@app.route("/reader")
+def index():
+    # Get all of the things to be displayed in this view
+    manga_list = []
+    chapters = {}
+    manga_urls = {}
+    cover_urls = {}
+    chapter_urls = {}
+    date_str = {}
+    # Iterate through all the manga in the database (eventually this will be
+    # shortened to the first 50 chapters or so...)
+    index = 0
+    for manga in Manga.query.order_by("last_updated desc").limit(12):
+        newest_chapter = manga.chapters.order_by("date_added desc").first()
+        if newest_chapter:
+            chapter_num = chapter_to_string(float(newest_chapter.num))
+            chapters[manga.name] = "Chapter %s: %s" % (chapter_num,
+                    newest_chapter.name)
+            chapter_urls[manga.name] = url_for("view_page", manga=manga.url,
+                chapter=chapter_to_string(newest_chapter.num))
+            manga_list.append(manga.name)
+            manga_urls[manga.name] = url_for("view_manga", manga=manga.url)
+            cover_urls[manga.name] = manga.cover
+            date = manga.last_updated.date()
+            date_str[manga.name] = "%02d.%02d.%02d" % (date.day, date.month,
+                    date.year % 100)
+
+    return render_template("index.html", manga_list=manga_list,
+                            cover_urls=cover_urls, chapters=chapters,
+                            manga_urls=manga_urls, chapter_urls=chapter_urls,
+                            date_str=date_str)
+
 # Reader
 @app.route("/reader/<manga>/<chapter>")
 def view_page(manga=None, chapter=None):
     # Redirect to the summary page
     if not chapter:
-        redirect(url_for("view_manga", manga))
+        redirect(url_for("view_manga", manga=manga))
 
     # Make sure that a manga with that url exists
     manga = Manga.query.filter_by(url=manga).first()

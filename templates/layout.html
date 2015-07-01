@@ -2,23 +2,26 @@
 <html>
 
   <head>
-    <script 
+    <script
         src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
     </script>
-    <link rel="shortcut icon" 
+    <link rel="shortcut icon"
         href="{{ url_for('static', filename='favicon.ico') }}" />
-    <link rel="stylesheet" type="text/css" 
+    <link rel="stylesheet" type="text/css"
         href="{{ url_for('static', filename='style.css') }}" />
-    
-    <link rel="stylesheet" type="text/css" 
+
+    <link rel="stylesheet" type="text/css"
         href="http://fonts.googleapis.com/css?family=Open+Sans">
-        
+
+        <link rel="stylesheet" type="text/css"
+            href="http://fonts.googleapis.com/css?family=Voces">
+
     <title>Renge</title>
   </head>
-  
+
   <body>
     {% block startbody %}
     {% endblock %}
   </body>
-  
+
 </html>

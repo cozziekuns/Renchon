@@ -59,7 +59,7 @@
 
   <!-- Load the script after the images have been loaded -->
 
-  <script src="/static/renchon.js"></script>
+  <script src="{{ url_for('static', filename='renchon.js') }}"></script>
 
   <script type="text/javascript">
     next_chapter = {{ next_chapter }};

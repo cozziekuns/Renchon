@@ -56,13 +56,13 @@ div#fullscreen {
 }
 
 #search_submit:hover {
-	background-color: rgba(32, 32, 32, 255);
+	background-color: rgba(128, 128, 128, 255);
 }
 
 /* Navigaton Bar Layout */
 
 div#navbar {
-	background-color: rgba(96, 96, 96, 255);
+	background-color: rgba(80, 80, 80, 255);
 }
 
 ul#navbar_left {
@@ -73,6 +73,7 @@ ul#navbar_left {
 ul#navbar_right {
 	display: inline-block;
 	float: right;
+	margin-bottom: 0px;
 }
 
 .navbar_list {
@@ -89,7 +90,7 @@ ul#navbar_right {
 	padding: 16px 32px 16px 32px;
 	color: rgba(255, 255, 255, 255);
 	margin-right: -5px;
-	background-color: rgba(158, 61, 80, 255);
+	background-color: rgba(128, 112, 160, 255);
 }
 
 /* Navigation Bar Buttons */
@@ -121,6 +122,7 @@ ul#navbar_right {
 	padding-top: 1em;
 	padding-bottom: 1em;
 }
+
 /* Sub-nav Bar Buttons */
 
 .subnav {
@@ -131,10 +133,12 @@ ul#navbar_right {
 
 .subnav_prev {
 	float: left;
+	margin-top: 2px;
 }
 
 .subnav_next {
   float: right;
+	margin-top: 2px;
 }
 
 .subnav_ul {
@@ -194,4 +198,69 @@ img#manga {
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 80%;
+}
+
+/* Heading */
+
+div#heading {
+	padding: 4px;
+	margin-top: 4px;
+	color: rgba(255, 255, 255, 255);
+	background: -webkit-linear-gradient(left, rgba(48, 48, 48, 255),
+			rgba(255, 255, 255, 255));
+	width: 80%;
+	font-family: "Voces", arial, sans-serif;
+	font-size: 20px;
+}
+
+span#heading {
+	margin-left: 16px;
+}
+
+/* Banner */
+
+img#banner {
+	width: 100%;
+	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+}
+
+/* Manga Tiles */
+
+.container {
+	display: box;
+	display: -webkit-box;
+	box-pack:center;
+	-webkit-box-pack: center;
+}
+
+.manga_tile {
+	width: 25%;
+	margin: 1em 2em;
+	text-align: center;
+}
+
+.manga_title {
+	font-size: 18px;
+	font-weight: bold;
+	font-family: "Voces", arial, sans-serif;
+}
+
+.tile_cover {
+	object-fit: cover;
+  object-position: center;
+	width: 100%;
+	height: 480px;
+	margin: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+}
+
+.date {
+	font-size: 14px;
+	color: rgba(96, 96, 96, 255);
 }
