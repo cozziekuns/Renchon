@@ -3,6 +3,7 @@ html, body {
   padding: 0;
 	font-family: "Open Sans", arial, sans-serif;
 	height: 100%;
+	min-width: 640px;
 }
 
 a:link, a:visited {
@@ -40,7 +41,7 @@ div#wrapper {
 }
 
 div#content {
-	padding-bottom: 156px;
+	padding-bottom: 176px;
 }
 
 div#main_wrapper {
@@ -53,7 +54,7 @@ div#main_wrapper {
 /* Footer */
 
 div#footer {
-	height: 156px;
+	height: 176px;
 	position: absolute;
 	background-color: rgba(64, 64, 64, 255);
 	color: rgba(192, 192, 192, 255);
@@ -62,7 +63,7 @@ div#footer {
 }
 
 span#footer_inner {
-	width: 70%;
+	width: 80%;
 	display: inline-block;
 	margin-top: 2em;
 	font-family: Lora;
@@ -121,6 +122,7 @@ div#fullscreen {
 
 div#navbar {
 	background-color: rgba(80, 80, 80, 255);
+	overflow: auto;
 }
 
 ul#navbar_left {
@@ -359,7 +361,11 @@ div#summary {
 
 div#summary img {
 	float: left;
-	height: 480px;
+	width: 30%;
+	min-width: 240px;
+	min-height: 360px;
+	max-width: 320px;
+	max-height: 480px;
 	margin-right: 3em;
 	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
 	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
