@@ -126,6 +126,7 @@ div#navbar {
 ul#navbar_left {
 	display: inline-block;
 	-webkit-padding-start: 0px;
+	-moz-padding-start: 0px;
 }
 
 ul#navbar_right {
@@ -137,6 +138,7 @@ ul#navbar_right {
 .navbar_list {
 	text-align: center;
 	-webkit-padding-start: 0px;
+	-moz-padding-start: 0px;
 }
 
 .navbar_list li {
@@ -200,8 +202,7 @@ ul#navbar_right {
 }
 
 .subnav_ul {
-	-webkit-margin-before: 0;
-  -webkit-margin-after: 0;
+	margin: 0;
 }
 
 li#subnav_divider {
@@ -270,13 +271,11 @@ img#banner {
 /* Manga Tiles */
 
 .container {
-	display: box;
-	display: -webkit-box;
-	box-pack:center;
-	-webkit-box-pack: center;
+	overflow: auto;
 }
 
 .manga_tile {
+	float: left;
 	width: 25%;
 	margin: 1em 2em;
 	text-align: center;
