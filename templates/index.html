@@ -6,7 +6,7 @@
   <div id="main_wrapper">
     <div id="heading"><span id="heading">Latest Updated Manga</span></div>
     <div class="container">
-      {% for manga in manga_list[:3] %}
+      {% for manga in manga_list %}
         <div class="manga_tile">
           <span class="manga_title">{{ manga }}</span>
           <a href="{{ manga_urls[loop.index0] }}">
@@ -20,42 +20,6 @@
         </div>
       {% endfor %}
     </div>
-
-    {% if manga_list[3:6] %}
-      <div class="container">
-      {% for manga in manga_list[3:6] %}
-        <div class="manga_tile">
-          <span class="manga_title">{{ manga }}</span>
-          <a href="{{ manga_urls[loop.index0 + 3] }}">
-            <img class="tile_cover" src="{{ cover_urls[loop.index0 + 3] }}">
-          </a>
-          <a href="{{ chapter_urls[loop.index0 + 3] }}">
-            {{ chapters[loop.index0 + 3] }}
-          </a>
-          <br>
-          <span class="date">Updated: {{ date_str[loop.index0 + 3] }}</span>
-        </div>
-      {% endfor %}
-      </div>
-    {% endif %}
-
-    {% if manga_list[6:] %}
-      <div class="container">
-      {% for manga in manga_list[6:] %}
-        <div class="manga_tile">
-          <span class="manga_title">{{ manga }}</span>
-          <a href="{{ manga_urls[loop.index0 + 6] }}">
-            <img class="tile_cover" src="{{ cover_urls[loop.index0 + 6] }}">
-          </a>
-          <a href="{{ chapter_urls[loop.index0 + 6] }}">
-            {{ chapters[loop.index0 + 6] }}
-          </a>
-          <br>
-          <span class="date">Updated: {{ date_str[loop.index0 + 6] }}</span>
-        </div>
-      {% endfor %}
-      </div>
-    {% endif %}
 
     <div id="back_to_top">
       <a href="#">↑ Back to top</a>

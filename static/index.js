@@ -1,11 +1,26 @@
-window.onresize = resize_images;
+window.onresize = move_tiles;
 
-function resize_images() {
-  images = document.getElementsByClassName("tile_cover");
-  for (i = 0; i < images.length; i++) {
-    new_height = window.innerWidth / 1304 * 480;
-    images[i].style.height = new_height.toString() + "px";
+function move_tiles() {
+  wrapper_width = $("#main_wrapper").width();
+  tiles = document.getElementsByClassName("manga_tile")
+  columns = 1
+  while ((columns + 1) * (tiles[0].offsetWidth + 64) - 64 < wrapper_width) {
+    columns += 1
+  }
+  new_margin = (wrapper_width - columns * (tiles[0].offsetWidth + 64) + 64) / 2 - 1
+  for (i = 0; i < tiles.length; i++) {
+    if (i % columns == 0) {
+      tiles[i].style.marginLeft = new_margin.toString() + "px"
+      tiles[i].style.marginRight = "32px";
+    } else if (i % columns == columns - 1) {
+      tiles[i].style.marginLeft = "32px";
+      tiles[i].style.marginRight = new_margin.toString() + "px"
+    } else {
+      tiles[i].style.marginLeft = "32px";
+      tiles[i].style.marginRight = "32px";
+    }
   }
 }
 
-resize_images();
+
+move_tiles();
