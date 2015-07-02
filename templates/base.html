@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block startbody %}
+
   <div id="navbar">
     <ul class="navbar_list main_nav_list" id="navbar_left">
       <li><span class="navbar_title">Renge</span></li>
@@ -9,7 +10,9 @@
         </a>
       </li>
       <li>
-        <a href="#"><span class="nav_button main_nav">Manga List</span></a>
+        <a href="{{ url_for("manga_list") }}">
+          <span class="nav_button main_nav">Manga List</span>
+        </a>
       </li>
     </ul>
     <ul class="navbar_list main_nav_list" id="navbar_right">
@@ -19,6 +22,21 @@
       </li>
     </ul>
   </div>
+
   {% block content %}
   {% endblock %}
+
+  <div id="footer">
+    <span id="footer_inner">
+      <p>All manga featured on this website are property of their respective
+      publishers. The translations here are fanmade and are advertisments of
+      works that are unable to be read by foreign viewers in their native
+      languages. If you liked any of the manga displayed here, please consider
+      buying the Japanese versions, or the local translations, where
+      available.</p>
+      <p>Website created with and managed via
+        <a href="https://github.com/cozziekuns/Renchon">Renchon</a>.</p>
+    </span>
+  </div>
+
 {% endblock %}

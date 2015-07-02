@@ -158,6 +158,35 @@ def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
 
     return chapter_list
 
+def update_chapter_list(chapter, manga, chapters, chapter_urls):
+    chapter_num = chapter_to_string(float(chapter.num))
+    chapters.append("Chapter %s: %s" % (chapter_num, chapter.name))
+    chapter_urls.append(url_for("view_page", manga=manga.url,
+        chapter=chapter_num))
+
+def dateifed_day(date):
+    if date.day % 10 == 1:
+        date_day = str(date.day) + "st"
+    elif date.day % 10 == 2:
+        date_day = str(date.day) + "nd"
+    elif date.day % 10 == 3:
+        date_day = str(date.day) + "rd"
+    else:
+        date_day = str(date.day) + "th"
+    return date_day
+
+def update_date_list(manga, date_str):
+    date = manga.last_updated.date()
+    date_str.append("%02d.%02d.%02d" % (date.day, date.month, date.year % 100))
+
+def update_date_list_full(manga, date_str):
+    months = ["January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"]
+    date = manga.last_updated.date()
+    day = dateifed_day(date)
+
+    date_str.append("%s %s, %d" % (months[date.month], day, date.year))
+
 #===============================================================================
 # ** Views
 #===============================================================================
@@ -289,33 +318,55 @@ def view_manga(manga=None):
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
-    chapters = {}
-    manga_urls = {}
-    cover_urls = {}
-    chapter_urls = {}
-    date_str = {}
-    # Iterate through all the manga in the database (eventually this will be
-    # shortened to the first 50 chapters or so...)
-    index = 0
-    for manga in Manga.query.order_by("last_updated desc").limit(12):
+    chapters = []
+    manga_urls = []
+    cover_urls = []
+    chapter_urls = []
+    date_str = []
+    # Iterate through the first 9 manga in the database
+    for manga in Manga.query.order_by("last_updated desc").limit(9):
         newest_chapter = manga.chapters.order_by("date_added desc").first()
-        if newest_chapter:
-            chapter_num = chapter_to_string(float(newest_chapter.num))
-            chapters[manga.name] = "Chapter %s: %s" % (chapter_num,
-                    newest_chapter.name)
-            chapter_urls[manga.name] = url_for("view_page", manga=manga.url,
-                chapter=chapter_to_string(newest_chapter.num))
-            manga_list.append(manga.name)
-            manga_urls[manga.name] = url_for("view_manga", manga=manga.url)
-            cover_urls[manga.name] = manga.cover
-            date = manga.last_updated.date()
-            date_str[manga.name] = "%02d.%02d.%02d" % (date.day, date.month,
-                    date.year % 100)
+        if not newest_chapter:
+            continue
+        manga_list.append(manga.name)
+        manga_urls.append(url_for("view_manga", manga=manga.url))
+        cover_urls.append(manga.cover)
+
+        update_chapter_list(newest_chapter, manga, chapters, chapter_urls)
+        update_date_list(manga, date_str)
 
     return render_template("index.html", manga_list=manga_list,
                             cover_urls=cover_urls, chapters=chapters,
                             manga_urls=manga_urls, chapter_urls=chapter_urls,
                             date_str=date_str)
+
+# Manga List
+@app.route("/reader/manga_list")
+def manga_list():
+    # Get all of the things to be displayed in this view
+    manga_list = []
+    manga_urls = []
+    authors = []
+    artists = []
+    chapters = []
+    chapter_urls = []
+    date_str = []
+    # Iterate through all of the manga in the database
+    for manga in Manga.query.order_by("name"):
+        newest_chapter = manga.chapters.order_by("date_added desc").first()
+        if not newest_chapter:
+            continue
+        manga_list.append(manga.name)
+        manga_urls.append(url_for("view_manga", manga=manga.url))
+        authors.append(manga.author)
+        artists.append(manga.artist)
+
+        update_chapter_list(newest_chapter, manga, chapters, chapter_urls)
+        update_date_list_full(manga, date_str)
+
+    return render_template("manga_list.html", manga_list=manga_list,
+        manga_urls=manga_urls, chapters=chapters, chapter_urls=chapter_urls,
+        authors=authors, artists=artists, date_str=date_str)
 
 # Reader
 @app.route("/reader/<manga>/<chapter>")

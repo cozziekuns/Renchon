@@ -15,7 +15,7 @@
         <ul class="navbar_list subnav_ul" id="subnav_list">
           <li id="subnav_title">{{ manga }}</li>
           <li id="subnav_divider">|</li>
-          <li id="subnav_dropdown">
+          <li class="subnav_dropdown">
             Chapter {{ chapter_num }}: {{ chapter_name }} ▾
             <ul>
               {% for chapter in chapters %}
@@ -26,7 +26,7 @@
             </ul>
           </li>
           <li></li>
-          <li id="subnav_dropdown">
+          <li class="subnav_dropdown">
             Page <span id="page_num">1</span> ▾
             <ul id="dropdown_page">
               <a href="#"><li>Page 1</li></a>

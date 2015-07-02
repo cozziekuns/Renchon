@@ -8,12 +8,14 @@
     {% for manga in manga_list[:3] %}
       <div class="manga_tile">
         <span class="manga_title">{{ manga }}</span>
-        <a href="{{ manga_urls[manga] }}">
-          <img class="tile_cover" src={{ cover_urls[manga] }}></img>
+        <a href="{{ manga_urls[loop.index0] }}">
+          <img class="tile_cover" src="{{ cover_urls[loop.index0] }}">
         </a>
-        <a href="{{ chapter_urls[manga] }}">{{ chapters[manga] }}</a>
+        <a href="{{ chapter_urls[loop.index0] }}">
+          {{ chapters[loop.index0] }}
+        </a>
         <br>
-        <span class="date">Updated: {{ date_str[manga] }}</span>
+        <span class="date">Updated: {{ date_str[loop.index0] }}</span>
       </div>
     {% endfor %}
   </div>
@@ -23,12 +25,14 @@
     {% for manga in manga_list[3:6] %}
       <div class="manga_tile">
         <span class="manga_title">{{ manga }}</span>
-        <a href="{{ manga_urls[manga] }}">
-          <img class="tile_cover" src={{ cover_urls[manga] }}></img>
+        <a href="{{ manga_urls[loop.index0 + 3] }}">
+          <img class="tile_cover" src="{{ cover_urls[loop.index0 + 3] }}">
         </a>
-        <a href="{{ chapter_urls[manga] }}">{{ chapters[manga] }}</a>
+        <a href="{{ chapter_urls[loop.index0 + 3] }}">
+          {{ chapters[loop.index0 + 3] }}
+        </a>
         <br>
-        <span class="date">Updated: {{ date_str[manga] }}</span>
+        <span class="date">Updated: {{ date_str[loop.index0 + 3] }}</span>
       </div>
     {% endfor %}
     </div>
@@ -39,16 +43,22 @@
     {% for manga in manga_list[6:] %}
       <div class="manga_tile">
         <span class="manga_title">{{ manga }}</span>
-        <a href="{{ manga_urls[manga] }}">
-          <img class="tile_cover" src={{ cover_urls[manga] }}></img>
+        <a href="{{ manga_urls[loop.index0 + 6] }}">
+          <img class="tile_cover" src="{{ cover_urls[loop.index0 + 6] }}">
         </a>
-        <a href="{{ chapter_urls[manga] }}">{{ chapters[manga] }}</a>
+        <a href="{{ chapter_urls[loop.index0 + 6] }}">
+          {{ chapters[loop.index0 + 6] }}
+        </a>
         <br>
-        <span class="date">Updated: {{ date_str[manga] }}</span>
+        <span class="date">Updated: {{ date_str[loop.index0 + 6] }}</span>
       </div>
     {% endfor %}
     </div>
   {% endif %}
+
+  <div id="back_to_top">
+    <a href="#">↑ Back to top.</a>
+  </div>
 
   <script src="{{ url_for('static', filename='index.js') }}"></script>
 
