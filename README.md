@@ -1,5 +1,5 @@
 # Renchon
-Full Reader/Admin Controls.
+Comic/Manga Reader Content Management System.
 
 Not intended for mobile use.
 
