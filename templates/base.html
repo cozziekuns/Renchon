@@ -17,14 +17,19 @@
     </ul>
     <ul class="navbar_list main_nav_list" id="navbar_right">
       <li>
-        <input id="searchbox" name="search" type="text" placeholder="Search">
-        <input id="search_submit" type="submit" value="Submit">
+        <form action={{ url_for("search") }} method=post>
+          <input id="searchbox" name="search" type="text" placeholder="Search"
+            required>
+          <input id="search_submit" type="submit" value="Submit">
+        </form>
       </li>
     </ul>
   </div>
 
-  {% block content %}
-  {% endblock %}
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
 
   <div id="footer">
     <span id="footer_inner">

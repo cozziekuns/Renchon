@@ -1,7 +1,8 @@
-body {
+html, body {
 	margin: 0;
   padding: 0;
 	font-family: "Open Sans", arial, sans-serif;
+	height: 100%;
 }
 
 a:link, a:visited {
@@ -12,6 +13,38 @@ a:link, a:visited {
 a:hover {
 	color: rgba(224, 96, 0, 255);
 }
+
+/* Wrapper */
+
+div#wrapper {
+	min-height: 100%;
+	position: relative;
+}
+
+div#content {
+	padding-bottom: 156px;
+}
+
+/* Footer */
+
+div#footer {
+	height: 156px;
+	position: absolute;
+	background-color: rgba(64, 64, 64, 255);
+	color: rgba(192, 192, 192, 255);
+	padding: 0em 3em;
+	bottom: 0;
+}
+
+span#footer_inner {
+	width: 70%;
+	display: inline-block;
+	margin-top: 2em;
+	font-family: Lora;
+	font-size: 12px;
+}
+
+/* Fullscreen */
 
 div#fullscreen {
 	padding: 32px;
@@ -306,21 +339,4 @@ div#back_to_top {
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 14px;
-}
-
-/* Footer */
-
-div#footer {
-	margin-top: 0;
-	background-color: rgba(64, 64, 64, 255);
-	color: rgba(192, 192, 192, 255);
-	padding: 2em 3em;
-}
-
-span#footer_inner {
-	display: inline-block;
-	left: 10%;
-	width: 70%;
-	font-family: Lora;
-	font-size: 12px;
 }

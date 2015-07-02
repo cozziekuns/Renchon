@@ -187,6 +187,27 @@ def update_date_list_full(manga, date_str):
 
     date_str.append("%s %s, %d" % (months[date.month], day, date.year))
 
+def create_manga_list(manga_query):
+    result = {}
+    result["chapters"] = []
+    result["chapter_urls"] = []
+    result["date_str"] = []
+    for manga in manga_query:
+        newest_chapter = manga.chapters.order_by("date_added desc").first()
+        if not newest_chapter:
+            continue
+        manga_url = url_for("view_manga", manga=manga.url)
+        result.setdefault("manga_list", []).append(manga.name)
+        result.setdefault("manga_urls", []).append(manga_url)
+        result.setdefault("authors", []).append(manga.author)
+        result.setdefault("artists", []).append(manga.author)
+
+        update_chapter_list(newest_chapter, manga, result["chapters"],
+            result["chapter_urls"])
+        update_date_list_full(manga, result["date_str"])
+
+    return result
+
 #===============================================================================
 # ** Views
 #===============================================================================
@@ -299,20 +320,6 @@ def delete_chapter():
 
     return redirect(url_for("admin"))
 
-# Manga Summary Page
-@app.route("/reader/<manga>")
-def view_manga(manga=None):
-    # Redirect to the index
-    if not manga:
-        redirect(url_for("index"))
-
-    # Make sure that a manga with that url exists
-    manga = Manga.query.filter_by(url=manga).first()
-    if manga is None:
-        return render_template("404.html"), 404
-
-    return render_template("manga.html", manga=manga)
-
 # Index
 @app.route("/reader")
 def index():
@@ -340,33 +347,35 @@ def index():
                             manga_urls=manga_urls, chapter_urls=chapter_urls,
                             date_str=date_str)
 
+# Manga Summary Page
+@app.route("/reader/<manga>")
+def view_manga(manga=None):
+    # Redirect to the index
+    if not manga:
+        redirect(url_for("index"))
+
+    # Make sure that a manga with that url exists
+    manga = Manga.query.filter_by(url=manga).first()
+    if manga is None:
+        return render_template("404.html"), 404
+
+    return render_template("manga.html", manga=manga)
+
+# Search
+@app.route("/reader/search", methods=["POST"])
+def search():
+    query = request.form["search"]
+    manga_list = Manga.query.filter(Manga.name.contains(query))
+    # Create a list of all manga that fits the search
+    kwargs = create_manga_list(manga_list)
+    return render_template("search.html", **kwargs)
+
 # Manga List
 @app.route("/reader/manga_list")
 def manga_list():
-    # Get all of the things to be displayed in this view
-    manga_list = []
-    manga_urls = []
-    authors = []
-    artists = []
-    chapters = []
-    chapter_urls = []
-    date_str = []
-    # Iterate through all of the manga in the database
-    for manga in Manga.query.order_by("name"):
-        newest_chapter = manga.chapters.order_by("date_added desc").first()
-        if not newest_chapter:
-            continue
-        manga_list.append(manga.name)
-        manga_urls.append(url_for("view_manga", manga=manga.url))
-        authors.append(manga.author)
-        artists.append(manga.artist)
-
-        update_chapter_list(newest_chapter, manga, chapters, chapter_urls)
-        update_date_list_full(manga, date_str)
-
-    return render_template("manga_list.html", manga_list=manga_list,
-        manga_urls=manga_urls, chapters=chapters, chapter_urls=chapter_urls,
-        authors=authors, artists=artists, date_str=date_str)
+    # Create a list of all manga ordered by their name
+    kwargs = create_manga_list(Manga.query.order_by("name"))
+    return render_template("manga_list.html", **kwargs)
 
 # Reader
 @app.route("/reader/<manga>/<chapter>")

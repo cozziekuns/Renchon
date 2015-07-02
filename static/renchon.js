@@ -18,6 +18,8 @@ var pan_start_y = -1;
 // This is the main image that is displayed by the reader
 var manga_image = document.getElementById("manga");
 
+document.body.style.backgroundColor = "rgba(160, 160, 160, 255)";
+
 /* Preload Images */
 
 function preload() {
