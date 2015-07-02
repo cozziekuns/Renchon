@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <img id="banner" src="{{ url_for('static', filename='banner.png') }}">
+
+  <div id="main_wrapper">
+    <div id="heading"><span id="heading">Manga</span></div>
+    <div id="summary">
+      <img src="{{ cover_url }}">
+      <table>
+        <tr>
+          <th>Name: </th>
+          <td>{{ manga }}</td>
+        </tr>
+        <tr>
+          <th>Author: </th>
+          <td>{{ author }}</td>
+        </tr>
+        <tr>
+          <th>Artist: </th>
+          <td>{{ artist }}</td>
+        </tr>
+          <th>Description: </th>
+          <td>{{ description }}</td>
+        <tr>
+        </tr>
+      </table>
+    </div>
+
+    <div id="heading"><span id="heading">Chapter List</span></div>
+
+    <table id="manga_list">
+      <tr>
+        <th>Chapter</th>
+        <th id="manga_list_date">Date Submitted</th>
+      </tr>
+      {% for chapter in chapter_list %}
+        {% if loop.index0 % 2 == 1 %}
+          <tr class="alt">
+        {% else %}
+          <tr>
+        {% endif %}
+          <td><a href="{{ chapter_urls[loop.index0] }}">{{ chapter }}</a></td>
+          <td id="manga_list_date">{{ date_str[loop.index0] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <div id="back_to_top">
+      <a href="#">↑ Back to top.</a>
+    </div>
+  </div>
+
+{% endblock %}

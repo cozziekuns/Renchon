@@ -325,9 +325,9 @@ def delete_chapter():
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
-    chapters = []
     manga_urls = []
     cover_urls = []
+    chapters = []
     chapter_urls = []
     date_str = []
     # Iterate through the first 9 manga in the database
@@ -337,7 +337,7 @@ def index():
             continue
         manga_list.append(manga.name)
         manga_urls.append(url_for("view_manga", manga=manga.url))
-        cover_urls.append(manga.cover)
+        cover_urls.append("/" + manga.cover)
 
         update_chapter_list(newest_chapter, manga, chapters, chapter_urls)
         update_date_list(manga, date_str)
@@ -350,6 +350,11 @@ def index():
 # Manga Summary Page
 @app.route("/reader/<manga>")
 def view_manga(manga=None):
+
+    chapter_list = []
+    chapter_urls = []
+    date_str = []
+
     # Redirect to the index
     if not manga:
         redirect(url_for("index"))
@@ -359,7 +364,20 @@ def view_manga(manga=None):
     if manga is None:
         return render_template("404.html"), 404
 
-    return render_template("manga.html", manga=manga)
+    cover_url = "/" + manga.cover
+    for chapter in manga.chapters.order_by("num desc"):
+        chapter_num = chapter_to_string(float(chapter.num))
+        chapter_list.append("Chapter %s: %s" % (chapter_num, chapter.name))
+        chapter_urls.append(url_for("view_page", manga=manga.url,
+            chapter=chapter_num))
+        date = chapter.date_added.date()
+        date_str.append("%02d.%02d.%02d" % (date.day, date.month,
+            date.year % 100))
+
+    return render_template("manga.html", manga=manga.name, author=manga.author,
+            artist=manga.artist, cover_url=cover_url,
+            description=manga.description, chapter_list=chapter_list,
+            chapter_urls=chapter_urls, date_str=date_str)
 
 # Search
 @app.route("/reader/search", methods=["POST"])

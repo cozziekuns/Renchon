@@ -14,6 +14,24 @@ a:hover {
 	color: rgba(224, 96, 0, 255);
 }
 
+/* Heading */
+
+div#heading {
+	font-family: "Voces", arial, sans-serif;
+	font-size: 20px;
+	color: rgba(255, 255, 255, 255);
+	text-align: center;
+	background-color: rgba(80, 80, 80, 255);
+	padding: 4px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid rgba(32, 32, 32, 255);
+}
+
+span#heading {
+	margin-left: 16px;
+}
+
 /* Wrapper */
 
 div#wrapper {
@@ -23,6 +41,13 @@ div#wrapper {
 
 div#content {
 	padding-bottom: 156px;
+}
+
+div#main_wrapper {
+	width: 90%;
+	background-color: rbga(255, 255, 255, 255);
+	margin: -5px auto 0;
+	padding: 2em 1em 0em;
 }
 
 /* Footer */
@@ -233,23 +258,6 @@ img#manga {
 	max-width: 80%;
 }
 
-/* Heading */
-
-div#heading {
-	padding: 4px;
-	margin-top: 4px;
-	color: rgba(255, 255, 255, 255);
-	background: -webkit-linear-gradient(left, rgba(48, 48, 48, 255),
-			rgba(255, 255, 255, 255));
-	width: 80%;
-	font-family: "Voces", arial, sans-serif;
-	font-size: 20px;
-}
-
-span#heading {
-	margin-left: 16px;
-}
-
 /* Banner */
 
 img#banner {
@@ -301,7 +309,7 @@ img#banner {
 /* Manga List */
 
 #manga_list {
-	width: 95%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 1em;
@@ -311,7 +319,7 @@ img#banner {
 
 #manga_list th {
 	text-align: left;
-	border: 0 1px solid rgba(128, 112, 160, 255);
+	border: 0;
 	color: rgba(255, 255, 255, 255);
 	background-color: rgba(128, 112, 160, 255);
 	font-weight: normal;
@@ -320,7 +328,7 @@ img#banner {
 
 #manga_list td {
 	padding-left: 0.5em;
-	border: 0 1px solid rgba(128, 112, 160, 255);
+	border: 0;
 	background-color: rgba(232, 216, 255, 255);
 }
 
@@ -330,13 +338,46 @@ img#banner {
 
 th#manga_list_date, td#manga_list_date {
 	text-align: right;
+	padding-right: 0.5em;
 }
 
 div#back_to_top {
-	width: 95%;
 	margin-top: 0.5em;
-	margin-bottom: 3em;
 	margin-left: auto;
 	margin-right: auto;
+	padding-bottom: 3em;
 	font-size: 14px;
+}
+
+/* Manga Summary */
+
+div#summary {
+	margin: 2em auto;
+	min-height: 480px;
+}
+
+div#summary img {
+	float: left;
+	height: 480px;
+	margin-right: 3em;
+	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+}
+
+div#summary table {
+	padding: 1em;
+	border-collapse: collapse;
+}
+
+div#summary th {
+	padding: 0.5em 0;
+	text-align: right;
+	vertical-align: top;
+	border-bottom: 1px solid rgba(192, 192, 192, 255);
+}
+
+div#summary td {
+	padding: 0.5em 1em;
+	border-bottom: 1px solid rgba(192, 192, 192, 255);
 }
