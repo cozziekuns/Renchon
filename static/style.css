@@ -318,17 +318,19 @@ img#banner {
 
 #manga_list th {
 	text-align: left;
-	border: 0;
 	color: rgba(255, 255, 255, 255);
 	background-color: rgba(128, 112, 160, 255);
 	font-weight: normal;
 	padding-left: 0.5em;
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
 
 #manga_list td {
-	padding-left: 0.5em;
-	border: 0;
 	background-color: rgba(232, 216, 255, 255);
+	padding-left: 0.5em;
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
 
 #manga_list tr.alt td {
