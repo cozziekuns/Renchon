@@ -7,7 +7,9 @@ function move_tiles() {
   while ((columns + 1) * (tiles[0].offsetWidth + 64) - 64 < wrapper_width) {
     columns += 1
   }
-  new_margin = (wrapper_width - columns * (tiles[0].offsetWidth + 64) + 64) / 2 - 1
+  columns = Math.min(columns, tiles.length);
+  total_margin = columns * (tiles[0].offsetWidth + 64) + 64;
+  new_margin = (wrapper_width - total_margin) / 2 - 1;
   for (i = 0; i < tiles.length; i++) {
     if (i % columns == 0) {
       tiles[i].style.marginLeft = new_margin.toString() + "px"

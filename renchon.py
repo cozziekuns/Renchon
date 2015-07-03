@@ -472,5 +472,20 @@ def view_page(manga=None, chapter=None):
 def page_not_found(e):
     return render_template("404.html"), 404
 
+# Database Initialisation
+@app.before_first_request
+def setup_database(*args, **kwargs):
+    file_path = 'tmp/reader.db'
+    # Create tmp folder if it doesn't exist
+    if not os.path.exists('tmp'):
+        os.mkdir('tmp')
+    # Clear old database if file exists
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    # Make new database
+    file = open(file_path, 'w+')
+    file.close()
+    db.create_all()
+
 if __name__ == "__main__":
     app.run(debug=True)
