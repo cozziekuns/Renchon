@@ -16,11 +16,11 @@ from werkzeug import secure_filename
 UPLOAD_FOLDER = 'static/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
+application = Flask(__name__)
+application.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(application)
 
 #===============================================================================
 # ** Manga
@@ -116,7 +116,7 @@ def save_file(file, url, filename=None):
     if filename is None:
         filename = file.filename
     filename = secure_filename(filename)
-    directory = app.config['UPLOAD_FOLDER'] + url + "/"
+    directory = application.config['UPLOAD_FOLDER'] + url + "/"
     # Make the directory in case it doesn't exist
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -126,7 +126,7 @@ def save_file(file, url, filename=None):
     return complete_url
 
 def delete_directory(url):
-    shutil.rmtree(app.config['UPLOAD_FOLDER'] + url)
+    shutil.rmtree(application.config['UPLOAD_FOLDER'] + url)
 
 def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
     # If there is no chapter before, just insert an extra chapter at the top
@@ -213,7 +213,7 @@ def create_manga_list(manga_query):
 #===============================================================================
 
 # Admin
-@app.route("/reader/admin")
+@application.route("/reader/admin")
 def admin():
     manga = Manga.query.order_by("last_updated desc").all()
     manga_list = list(map(lambda x: x.name, manga))
@@ -223,7 +223,7 @@ def admin():
         chapter_list=chapter_list)
 
 # Add Manga
-@app.route("/reader/add_manga", methods=["POST"])
+@application.route("/reader/add_manga", methods=["POST"])
 def add_manga():
     name = request.form["manga_name"]
     url = request.form["manga_url"]
@@ -235,7 +235,7 @@ def add_manga():
         return render_template('admin.html', error=error_text)
 
     # Handle the case where there are conflicting manga urls
-    if os.path.exists(app.config['UPLOAD_FOLDER'] + url):
+    if os.path.exists(application.config['UPLOAD_FOLDER'] + url):
         return render_template('admin.html', error="Manga URL already exists.")
 
     # Handle the case where the file is not sent
@@ -261,7 +261,7 @@ def add_manga():
     return redirect(url_for("admin"))
 
 # Add Chapter
-@app.route("/reader/add_chapter", methods=["POST"])
+@application.route("/reader/add_chapter", methods=["POST"])
 def add_chapter():
     name = request.form["chapter_name"]
     num = 0
@@ -304,7 +304,7 @@ def add_chapter():
     return redirect(url_for("admin"))
 
 # Delete Chapter
-@app.route("/reader/delete_chapter", methods=["POST"])
+@application.route("/reader/delete_chapter", methods=["POST"])
 def delete_chapter():
     manga = Manga.query.filter_by(
         name=request.form["chapter_delete_manga"]).first()
@@ -321,7 +321,7 @@ def delete_chapter():
     return redirect(url_for("admin"))
 
 # Index
-@app.route("/reader")
+@application.route("/reader")
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
@@ -348,7 +348,7 @@ def index():
                             date_str=date_str)
 
 # Manga Summary Page
-@app.route("/reader/<manga>")
+@application.route("/reader/<manga>")
 def view_manga(manga=None):
 
     chapter_list = []
@@ -380,7 +380,7 @@ def view_manga(manga=None):
             chapter_urls=chapter_urls, date_str=date_str)
 
 # Search
-@app.route("/reader/search", methods=["POST"])
+@application.route("/reader/search", methods=["POST"])
 def search():
     query = request.form["search"]
     manga_list = Manga.query.filter(Manga.name.contains(query))
@@ -389,14 +389,14 @@ def search():
     return render_template("search.html", **kwargs)
 
 # Manga List
-@app.route("/reader/manga_list")
+@application.route("/reader/manga_list")
 def manga_list():
     # Create a list of all manga ordered by their name
     kwargs = create_manga_list(Manga.query.order_by("name"))
     return render_template("manga_list.html", **kwargs)
 
 # Reader
-@app.route("/reader/<manga>/<chapter>")
+@application.route("/reader/<manga>/<chapter>")
 def view_page(manga=None, chapter=None):
     # Redirect to the summary page
     if not chapter:
@@ -468,12 +468,12 @@ def view_page(manga=None, chapter=None):
                           next_chapter=next_chapter)
 
 # Page Not Found
-@app.errorhandler(404)
+@application.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
 # Database Initialisation
-@app.before_first_request
+@application.before_first_request
 def setup_database(*args, **kwargs):
     file_path = 'tmp/reader.db'
     # Create tmp folder if it doesn't exist
@@ -487,4 +487,4 @@ def setup_database(*args, **kwargs):
         db.create_all()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)
