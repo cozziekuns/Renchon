@@ -383,7 +383,8 @@ def view_manga(manga=None):
 @application.route("/reader/search", methods=["POST"])
 def search():
     query = request.form["search"]
-    manga_list = Manga.query.filter(Manga.name.contains(query))
+    manga_list = Manga.query.filter(Manga.name.contains(query) |
+            Manga.author.contains(query) | Manga.artist.contains(query))
     # Create a list of all manga that fits the search
     kwargs = create_manga_list(manga_list)
     return render_template("search.html", **kwargs)

@@ -24,14 +24,10 @@ document.body.style.backgroundColor = "rgba(160, 160, 160, 255)";
 
 function preload() {
 
-  if (curr_page + 3 > last_page) {
-    limit = last_page;
-  } else {
-    limit = curr_page + 3;
-  }
+  lower = Math.max(0, curr_page - 2);
+  upper = Math.min(last_page, curr_page + 2);
 
-  for (i = curr_page - 1; i < limit; i++) {
-
+  for (i = lower; i < upper; i++) {
     // Only preload images that haven't been cached
     if (cache[i]) {
       continue;
@@ -80,7 +76,6 @@ function check_key_down(e) {
 function check_key_up(e) {
 
   // Just refresh the key trigger
-
   e = e || window.event;
   if (e.keyCode == key_triggered) {
     key_triggered = 0;
@@ -95,14 +90,8 @@ $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange",
   function() {
 
     fullscreen_enabled = document.fullscreenElement ||
-                        document.mozFullScreenElement ||
-                        document.webkitFullscreenElement;
-
-    if (fullscreen_enabled) {
-      center_image();
-    } else {
-      revert_image();
-    }
+        document.mozFullScreenElement || document.webkitFullscreenElement;
+    fullscreen_enabled ? center_image() : revert_image();
 
   }
 
@@ -251,6 +240,7 @@ manga_image.addEventListener("DOMMouseScroll", scroll_mouse, false);
 function scroll_mouse(event) {
 
 	delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+
   if (delta == -1) {
     scroll_down();
   } else if (delta == 1) {
@@ -319,12 +309,7 @@ function goto_page(page) {
   curr_page = page;
   manga_image.src = page_urls[curr_page - 1];
 
-  if (fullscreen_enabled) {
-    center_image();
-  } else {
-    window.scrollTo(0, 0);
-  }
-
+  fullscreen_enabled ? center_image() : window.scrollTo(0, 0);
   preload();
   update_navbar_page();
 
