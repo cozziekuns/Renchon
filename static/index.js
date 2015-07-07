@@ -10,8 +10,6 @@ function move_tiles() {
   columns = Math.min(columns, tiles.length);
   total_margin = columns * (tiles[0].offsetWidth + 64) - 64;
   new_margin = (wrapper_width - total_margin) / 2 - 1;
-  alert(total_margin)
-  alert(new_margin)
   for (i = 0; i < tiles.length; i++) {
     if (i % columns == 0) {
       tiles[i].style.marginLeft = new_margin.toString() + "px"

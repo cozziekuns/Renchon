@@ -123,6 +123,9 @@ target/
 # Anything in a folder inside static
 static/*/
 
+# requirements
+requirements.txt
+
 # Elastic Beanstalk Files
 
 .elasticbeanstalk/*
