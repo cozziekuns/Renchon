@@ -237,6 +237,12 @@ function scroll_up() {
 manga_image.addEventListener("mousewheel", scroll_mouse, false);
 manga_image.addEventListener("DOMMouseScroll", scroll_mouse, false);
 
+fs_div = document.getElementById("fullscreen")
+fs_div.addEventListener("touchstart", start_pan_touch, false);
+fs_div.addEventListener("touchmove", process_pan_touch, false);
+fs_div.addEventListener("touchend", end_pan, false);
+
+
 function scroll_mouse(event) {
 
 	delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
@@ -258,33 +264,64 @@ function start_pan(event) {
 
 }
 
+function start_pan_touch(event) {
+
+  pan_start_x = event.changedTouches[0].pageX;
+  pan_start_y = event.changedTouches[0].pageY;
+
+}
+
 function process_pan(event) {
 
   if (pan_start_x >= 0 && pan_start_y >= 0) {
+
     x_diff = event.clientX - pan_start_x;
     y_diff = event.clientY - pan_start_y;
 
-    dest_x = parseInt(manga_image.style.marginLeft) + x_diff
-    dest_y = parseInt(manga_image.style.marginTop) + y_diff
-
-    // Only pan horizontally if the width of the page is greater
-    // than the width of the screen
-    if (parseInt(manga_image.style.width) > screen.width) {
-      max_margin = screen.width - parseInt(manga_image.style.width);
-      new_margin = Math.max(Math.min(0, dest_x), max_margin);
-      manga_image.style.marginLeft = new_margin.toString() + "px";
-    }
-
-    // Only scroll if the height of the page is greater than the
-    // height of the screen
-    if (parseInt(manga_image.style.height) > screen.height) {
-      max_margin = screen.height - parseInt(manga_image.style.height);
-      new_margin = Math.max(Math.min(0, dest_y), max_margin);
-      manga_image.style.marginTop = new_margin.toString() + "px";
-    }
+    pan_logic();
 
     pan_start_x = event.clientX;
     pan_start_y = event.clientY;
+
+  }
+
+}
+
+function process_pan_touch(event) {
+
+  if (pan_start_x >= 0 && pan_start_y >= 0) {
+
+    x_diff = event.changedTouches[0].pageX - pan_start_x;
+    y_diff = event.changedTouches[0].pageY - pan_start_y;
+
+    pan_logic();
+
+    pan_start_x = event.changedTouches[0].pageX;
+    pan_start_y = event.changedTouches[0].pageY;
+
+  }
+
+}
+
+function pan_logic() {
+
+  dest_x = parseInt(manga_image.style.marginLeft) + x_diff
+  dest_y = parseInt(manga_image.style.marginTop) + y_diff
+
+  // Only pan horizontally if the width of the page is greater
+  // than the width of the screen
+  if (parseInt(manga_image.style.width) > screen.width) {
+    max_margin = screen.width - parseInt(manga_image.style.width);
+    new_margin = Math.max(Math.min(0, dest_x), max_margin);
+    manga_image.style.marginLeft = new_margin.toString() + "px";
+  }
+
+  // Only scroll if the height of the page is greater than the
+  // height of the screen
+  if (parseInt(manga_image.style.height) > screen.height) {
+    max_margin = screen.height - parseInt(manga_image.style.height);
+    new_margin = Math.max(Math.min(0, dest_y), max_margin);
+    manga_image.style.marginTop = new_margin.toString() + "px";
   }
 
 }
