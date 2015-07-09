@@ -1,8 +1,7 @@
 #=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 # ** Renchon
 #------------------------------------------------------------------------------
-# Main module that creates the views, runs the database, and runs the app. Ok,
-# it basically does it all.
+# Main module that creates the views and runs the app.
 #=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 import os
@@ -10,90 +9,17 @@ import shutil
 
 from datetime import datetime
 from flask import Flask, request, render_template, redirect, url_for
-from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
+from models import db, Manga, Chapter, Page
 
-UPLOAD_FOLDER = 'static/'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+UPLOAD_FOLDER = "static/"
+ALLOWED_EXTENSIONS = set(["png", "jpg", "jpeg"])
 
 application = Flask(__name__)
 application.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
 
-db = SQLAlchemy(application)
-
-#===============================================================================
-# ** Manga
-#===============================================================================
-
-class Manga(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), index=True, unique=True)
-    url = db.Column(db.String(100), unique=True)
-    author = db.Column(db.String(50), index=True)
-    artist = db.Column(db.String(50), index=True)
-    status = db.Column(db.String(20))
-    cover = db.Column(db.String(150))
-    description = db.Column(db.String(1000))
-    last_updated = db.Column(db.DateTime)
-
-    def __init__(self, name, url, author, artist, status, cover, description):
-        self.name = name
-        self.url = url
-        self.author = author
-        self.artist = artist
-        self.status = status
-        self.cover = cover
-        self.description = description
-        self.last_updated = datetime.utcnow()
-
-    def __repr__(self):
-        return "<User %r>" % (self.name)
-
-#===============================================================================
-# ** Chapter
-#===============================================================================
-
-class Chapter(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    num = db.Column(db.Float)
-    date_added = db.Column(db.DateTime)
-    manga_id = db.Column(db.Integer, db.ForeignKey("manga.id"))
-    manga = db.relationship("Manga",
-                            backref=db.backref("chapters", lazy="dynamic"))
-
-    def __init__(self, name, num, manga):
-        self.name = name
-        self.num = num
-        self.manga = manga
-        self.date_added = datetime.utcnow()
-
-    def __repr__(self):
-        return "<Chapter %r>" % (self.name)
-
-#===============================================================================
-# ** Page
-#===============================================================================
-
-class Page(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    num = db.Column(db.Integer)
-    image = db.Column(db.String(150))
-    chapter_id = db.Column(db.Integer, db.ForeignKey("chapter.id"))
-    chapter = db.relationship("Chapter",
-                              backref=db.backref("pages", lazy="dynamic"))
-
-    def __init__(self, num, image, chapter):
-        self.num = num
-        self.image = image
-        self.chapter = chapter
-
-    def __repr__(self):
-        return "<Page %r>" % (self.num)
+db.init_app(application)
 
 #===============================================================================
 # ** Helper Methods
@@ -384,7 +310,8 @@ def view_manga(manga=None):
 def search():
     query = request.form["search"]
     manga_list = Manga.query.filter(Manga.name.contains(query) |
-            Manga.author.contains(query) | Manga.artist.contains(query))
+            Manga.author.contains(query) |
+            Manga.artist.contains(query)).order_by("name")
     # Create a list of all manga that fits the search
     kwargs = create_manga_list(manga_list)
     return render_template("search.html", **kwargs)
