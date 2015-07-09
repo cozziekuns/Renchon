@@ -8,9 +8,11 @@ import os
 import shutil
 
 from datetime import datetime
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, session, render_template, redirect, url_for
 from werkzeug import secure_filename
 from models import db, Manga, Chapter, Page
+
+from admin import ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY
 
 UPLOAD_FOLDER = "static/"
 ALLOWED_EXTENSIONS = set(["png", "jpg", "jpeg"])
@@ -18,6 +20,7 @@ ALLOWED_EXTENSIONS = set(["png", "jpg", "jpeg"])
 application = Flask(__name__)
 application.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
+application.secret_key = SECRET_KEY
 
 db.init_app(application)
 
@@ -141,12 +144,26 @@ def create_manga_list(manga_query):
 # Admin
 @application.route("/reader/admin")
 def admin():
-    manga = Manga.query.order_by("last_updated desc").all()
-    manga_list = list(map(lambda x: x.name, manga))
-    chapter_list = list(map(lambda x: list(map(lambda y: [y.name, y.num],
-        x.chapters.order_by("num desc").all())), manga))
-    return render_template("admin.html", manga=manga_list,
-        chapter_list=chapter_list)
+    if session.get("logged_in"):
+        manga = Manga.query.order_by("last_updated desc").all()
+        manga_list = list(map(lambda x: x.name, manga))
+        chapter_list = list(map(lambda x: list(map(lambda y: [y.name, y.num],
+            x.chapters.order_by("num desc").all())), manga))
+        return render_template("admin.html", manga=manga_list,
+            chapter_list=chapter_list)
+    else:
+        return render_template("login.html", failed=False)
+
+# Admin login
+@application.route("/reader/admin/login", methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        session["logged_in"] = True
+        return redirect(url_for("admin"))
+    else:
+        return render_template("login.html", failed=True)
 
 # Add Manga
 @application.route("/reader/add_manga", methods=["POST"])

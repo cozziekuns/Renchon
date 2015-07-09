@@ -1,13 +1,19 @@
-{% extends "base.html" %}
-{% block content %}
-  <h1>Sign In</h1>
-  <form action="" method="post" name="login">
-    {{ form.hidden_tag() }}
-    <p>
-      Please enter your OpenID:<br>
-      {{ form.open_id(size=80) }}<br>
-    </p>
-    <p>{{ form.remember_me }} Remember Me</p>
-    <p><input type="submit" value="Sign In"></p>
-  </form>
+{% extends "layout.html" %}
+{% block startbody %}
+  <div class="login">
+    <h1>Admin Panel</h1>
+    {% if failed %}
+      <p id="warning">Login attempt failed. Please ensure that you have entered
+        the correct account information.</p>
+    {% endif %}
+    <form action={{ url_for("login") }} method="post" name="login">
+      <label for="username">Username: </label>
+      <input type="text" id="username" name="username" size=30 required>
+      <br>
+      <label for="password">Password: </label>
+      <input type="password" id="password" name="password" size=30 required>
+      <br>
+      <p id="submit"><input type="submit" value="Sign In"></p>
+    </form>
+  </div>
 {% endblock %}

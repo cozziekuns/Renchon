@@ -392,3 +392,41 @@ div#summary td {
 	padding: 0.5em 1em;
 	border-bottom: 1px solid rgba(192, 192, 192, 255);
 }
+
+/* Admin */
+.login {
+	position: absolute;
+	width: 400px;
+	height: 250px;
+	border: 1px solid;
+	top: 50%;
+	left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login h1 {
+	margin: 0 0 1em 0;
+	font-size: 1.2em;
+	font-weight: normal;
+	text-align: center;
+	background-color: rgba(80, 80, 80, 255);
+	color: rgba(255, 255, 255, 255);
+}
+
+.login label {
+	display: inline-block;
+	width: 6em;
+	text-align: right;
+	padding-right: 0.5em;
+	line-height: 2em;
+}
+
+.login p#warning {
+	font-size: 0.8em;
+	text-align: center;
+	background-color: rgba(255, 192, 192, 255);
+}
+
+.login p#submit {
+	margin-left: 6.75em;
+}
