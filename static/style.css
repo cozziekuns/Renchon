@@ -155,6 +155,10 @@ ul#navbar_right {
 	background-color: rgba(128, 112, 160, 255);
 }
 
+.navbar_title:hover {
+	color: rgba(255, 255, 160, 255);
+}
+
 /* Navigation Bar Buttons */
 
 .nav_button {
