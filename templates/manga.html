@@ -6,24 +6,49 @@
   <div id="main_wrapper">
     <div id="heading"><span id="heading">Manga</span></div>
     <div id="summary">
-      <img src="{{ cover_url }}">
+      <img id="cover_photo" src="{{ cover_url }}">
       <table>
         <tr>
           <th>Name: </th>
-          <td>{{ manga }}</td>
+          <td class="manga_info">{{ manga }}</td>
         </tr>
         <tr>
           <th>Author: </th>
-          <td>{{ author }}</td>
+          <td class="manga_info">{{ author }}</td>
         </tr>
         <tr>
           <th>Artist: </th>
-          <td>{{ artist }}</td>
+          <td class="manga_info">{{ artist }}</td>
         </tr>
-          <th>Description: </th>
-          <td>{{ description }}</td>
         <tr>
+          <th>Description: </th>
+          <td class="manga_info">{{ description|safe }}</td>
         </tr>
+        {% if session.logged_in %}
+          <tr>
+            <th>Admin: </th>
+            <td>
+              <form action={{ url_for("edit_manga") }} method=post
+                  enctype=multipart/form-data>
+                <input class="hidden_input" name="manga_oldname"
+                    value="{{ manga }}"/>
+                <input class="hidden_input" name="manga_name" />
+                <input class="hidden_input" name="manga_author" />
+                <input class="hidden_input" name="manga_artist" />
+                <input class="hidden_input" name="manga_description" />
+                <input id="manga_edit" type="button"
+                    value="Edit Manga Information">
+                <br>
+                <input type="button" name="manga_cover" value="Edit Cover Photo"
+                    onclick="edit_cover_photo()" />
+                <input id="cover" type="file" name="manga_cover"
+                    accept="image/*" />
+                <br>
+                <input type="submit" value="Submit Changes" />
+              </form>
+            </td>
+          </tr>
+        {% endif %}
       </table>
     </div>
 
@@ -49,5 +74,15 @@
       <a href="#">↑ Back to top</a>
     </div>
   </div>
+
+  <script src="{{ url_for('static', filename='manga_info.js') }}"></script>
+
+  {% if session.logged_in %}
+    <script type="text/javascript">
+      $("#cover").change(function() { read_url(this); })
+      $("#manga_edit").click(edit_text);
+      update_hidden_input();
+    </script>
+  {% endif %}
 
 {% endblock %}

@@ -6,12 +6,11 @@
 
 import os
 import shutil
-
 from datetime import datetime
+
 from flask import Flask, request, session, render_template, redirect, url_for
 from werkzeug import secure_filename
 from models import db, Manga, Chapter, Page
-
 from admin import ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY
 
 UPLOAD_FOLDER = "static/"
@@ -193,7 +192,7 @@ def add_manga():
     author = request.form["manga_author"]
     artist = request.form["manga_artist"]
     status = request.form["manga_status"]
-    description = request.form["manga_description"]
+    description = request.form["manga_description"].replace("\n", "<br>")
     new_manga = Manga(name, url, author, artist, status, cover_url,
         description)
 
@@ -202,6 +201,27 @@ def add_manga():
     db.session.commit()
 
     return redirect(url_for("admin"))
+
+# Edit Manga
+@application.route("/reader/edit_manga", methods=["POST"])
+def edit_manga():
+    # Find the manga using the old name
+    old_name = request.form["manga_oldname"]
+    manga = Manga.query.filter_by(name=old_name).first()
+    # Overwrite all the fields of the manga
+    manga.name = request.form["manga_name"]
+    manga.author = request.form["manga_author"]
+    manga.artist = request.form["manga_artist"]
+    manga.description = request.form["manga_description"].replace("<br>", "<br>")
+    print(manga.description)
+    # Ovewrite the cover file if necessary
+    cover_file = request.files["manga_cover"]
+    if cover_file.filename:
+        cover_filename = rename(cover_file, "cover")
+        manga.cover = save_file(cover_file, manga.url, cover_filename)
+    # Update and redirect to the original page
+    db.session.commit()
+    return redirect(url_for("view_manga", manga=manga.url))
 
 # Add Chapter
 @application.route("/reader/add_chapter", methods=["POST"])
@@ -293,7 +313,6 @@ def index():
 # Manga Summary Page
 @application.route("/reader/<manga>")
 def view_manga(manga=None):
-
     chapter_list = []
     chapter_urls = []
     date_str = []

@@ -264,13 +264,6 @@ function start_pan(event) {
 
 }
 
-function start_pan_touch(event) {
-
-  pan_start_x = event.changedTouches[0].pageX;
-  pan_start_y = event.changedTouches[0].pageY;
-
-}
-
 function process_pan(event) {
 
   if (pan_start_x >= 0 && pan_start_y >= 0) {
@@ -282,22 +275,6 @@ function process_pan(event) {
 
     pan_start_x = event.clientX;
     pan_start_y = event.clientY;
-
-  }
-
-}
-
-function process_pan_touch(event) {
-
-  if (pan_start_x >= 0 && pan_start_y >= 0) {
-
-    x_diff = event.changedTouches[0].pageX - pan_start_x;
-    y_diff = event.changedTouches[0].pageY - pan_start_y;
-
-    pan_logic();
-
-    pan_start_x = event.changedTouches[0].pageX;
-    pan_start_y = event.changedTouches[0].pageY;
 
   }
 
@@ -333,7 +310,33 @@ function end_pan() {
 
 }
 
+/* Touch Screen Panning */
+
+function start_pan_touch(event) {
+
+  pan_start_x = event.changedTouches[0].pageX;
+  pan_start_y = event.changedTouches[0].pageY;
+
+}
+
+function process_pan_touch(event) {
+
+  if (pan_start_x >= 0 && pan_start_y >= 0) {
+
+    x_diff = event.changedTouches[0].pageX - pan_start_x;
+    y_diff = event.changedTouches[0].pageY - pan_start_y;
+
+    pan_logic();
+
+    pan_start_x = event.changedTouches[0].pageX;
+    pan_start_y = event.changedTouches[0].pageY;
+    
+  }
+
+}
+
 /* Chapter Handling */
+
 function goto_chapter(chapter) {
   current_url = window.location.href;
   window.location.href = current_url.replace(/\d+$/, chapter);
@@ -356,10 +359,8 @@ function next_page() {
 
   if (curr_page < last_page) {
     goto_page(curr_page + 1);
-  } else {
-    if (parseInt(next_chapter) >= 0) {
-      goto_chapter(next_chapter);
-    }
+  } else if (parseInt(next_chapter) >= 0) {
+    goto_chapter(next_chapter);
   }
 
 }

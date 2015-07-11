@@ -15,6 +15,25 @@ a:hover {
 	color: rgba(224, 96, 0, 255);
 }
 
+input {
+	font-family: "Open Sans", arial, sans-serif;
+}
+
+input[type=submit], input[type=button] {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+
+select {
+	font-family: "Open Sans", arial, sans-serif;
+}
+
+textarea {
+	font-family: "Open Sans", arial, sans-serif;
+}
+
 /* Heading */
 
 div#heading {
@@ -393,7 +412,13 @@ div#summary td {
 	border-bottom: 1px solid rgba(192, 192, 192, 255);
 }
 
-/* Admin */
+div#summary input#cover {
+	position: absolute;
+	visibility: hidden;
+}
+
+/* Admin Login */
+
 .login {
 	position: absolute;
 	width: 400px;
@@ -429,4 +454,61 @@ div#summary td {
 
 .login p#submit {
 	margin-left: 6.75em;
+}
+
+/* Admin Tools */
+
+.admin_form {
+	min-width: 860px;
+	width: 80%;
+}
+
+.admin_form label {
+	display: inline-block;
+	width: 9.5em;
+	text-align: right;
+	padding-right: 0.5em;
+	line-height: 2em;
+}
+
+.admin_form .submit {
+	margin-left: 12.25em;
+}
+
+.admin_sidebar {
+	float: right;
+	min-width: 215px;
+	width: 20%;
+	border: 1px solid rgba(0, 0, 0, 255);
+}
+
+.admin_sidebar h1 {
+	font-size: 18px;
+	font-weight: normal;
+	text-align: center;
+	padding: 4px;
+	color: rgba(255, 255, 255, 255);
+	background-color: rgba(80, 80, 80, 255);
+	margin-top: 0;
+}
+
+.admin_sidebar h2 {
+	font-size: 1em;
+	font-weight: normal;
+	text-align: center;
+}
+
+.admin_sidebar ul {
+	padding-left: 1em;
+}
+
+.admin_sidebar ul li {
+	list-style-type: none;
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+}
+
+.hidden_input {
+	position: absolute;
+	visibility: hidden;
 }
