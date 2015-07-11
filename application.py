@@ -249,6 +249,9 @@ def add_chapter():
     url = new_chapter.manga.url + "/Chapter_" + num_string
     pages = request.files.getlist("chapter_pages")
     for page in pages:
+        # Skip resource forks
+        if "__MACOSX" in page.filename:
+            continue
         filename = rename(page, "%03d" % curr_page)
         # Make sure nothing that isn't an image file doesn't get through.
         if not allowed_file(page.filename):
