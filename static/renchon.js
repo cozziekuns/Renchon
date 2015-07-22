@@ -234,13 +234,12 @@ function scroll_up() {
 
 /* Mouse Scroll */
 
-manga_image.addEventListener("mousewheel", scroll_mouse, false);
-manga_image.addEventListener("DOMMouseScroll", scroll_mouse, false);
-
 fs_div = document.getElementById("fullscreen")
 fs_div.addEventListener("touchstart", start_pan_touch, false);
 fs_div.addEventListener("touchmove", process_pan_touch, false);
 fs_div.addEventListener("touchend", end_pan, false);
+fs_div.addEventListener("mousewheel", scroll_mouse, false);
+fs_div.addEventListener("DOMMouseScroll", scroll_mouse, false);
 
 
 function scroll_mouse(event) {
@@ -330,7 +329,7 @@ function process_pan_touch(event) {
 
     pan_start_x = event.changedTouches[0].pageX;
     pan_start_y = event.changedTouches[0].pageY;
-    
+
   }
 
 }
