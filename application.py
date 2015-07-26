@@ -203,7 +203,8 @@ def add_manga():
     author = request.form["manga_author"]
     artist = request.form["manga_artist"]
     status = request.form["manga_status"]
-    description = escape(request.form["manga_description"])
+    # Escape to avoid being pwnd by ATRAN
+    description = str(escape(request.form["manga_description"]))
     description = description.replace("\n", "<br>")
     new_manga = Manga(name, url, author, artist, status, cover_url,
         description)
@@ -225,9 +226,12 @@ def edit_manga():
     manga.name = request.form["manga_name"]
     manga.author = request.form["manga_author"]
     manga.artist = request.form["manga_artist"]
-    manga.description = escape(request.form["manga_description"])
-    manga.descript = manga.description.replace("\n", "<br>")
-    print(manga.description)
+    # Temporarily replace <br> with newlines
+    manga.description = request.form["manga_description"].replace("<br>", "\n")
+    # Escape the rest of the description, and convert it back to a string
+    manga.description = str(escape(manga.description))
+    # Now replace the newlines with <br> tags again
+    manga.description = manga.description.replace("\n", "<br>")
     # Ovewrite the cover file if necessary
     cover_file = request.files["manga_cover"]
     if cover_file.filename:
@@ -470,4 +474,4 @@ def setup_database(*args, **kwargs):
         db.create_all()
 
 if __name__ == "__main__":
-    application.run()
+    application.run(debug=True)
