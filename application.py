@@ -9,7 +9,8 @@ import shutil
 from datetime import datetime
 from functools import wraps
 
-from flask import Flask, request, session, render_template, redirect, url_for
+from flask import Flask, request, session, render_template, redirect, url_for, \
+    escape
 from werkzeug import secure_filename
 from models import db, Manga, Chapter, Page
 from admin import ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY
@@ -202,7 +203,7 @@ def add_manga():
     author = request.form["manga_author"]
     artist = request.form["manga_artist"]
     status = request.form["manga_status"]
-    description = request.form["manga_description"].replace("\n", "<br>")
+    description = escape(request.form["manga_description"]).replace("\n", "<br>")
     new_manga = Manga(name, url, author, artist, status, cover_url,
         description)
 
@@ -223,7 +224,7 @@ def edit_manga():
     manga.name = request.form["manga_name"]
     manga.author = request.form["manga_author"]
     manga.artist = request.form["manga_artist"]
-    manga.description = request.form["manga_description"].replace("<br>", "<br>")
+    manga.description = escape(request.form["manga_description"]).replace("\n", "<br>")
     print(manga.description)
     # Ovewrite the cover file if necessary
     cover_file = request.files["manga_cover"]
