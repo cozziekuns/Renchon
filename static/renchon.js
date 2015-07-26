@@ -400,9 +400,11 @@ function update_navbar_page() {
         ")'>" + "<li>Page " + i.toString() + "</li></a>";
   }
 
-  // And Last Page
-  dropdown.innerHTML +=
-      "<a href='#' onclick='goto_page(" + last_page.toString() +
-      ")'>" + "<li>Page " + last_page.toString() + " (Last)</li></a>";
+  if (last_page > 1) {
+    // And Last Page
+    dropdown.innerHTML +=
+        "<a href='#' onclick='goto_page(" + last_page.toString() +
+        ")'>" + "<li>Page " + last_page.toString() + " (Last)</li></a>";
+  }
 
 }
