@@ -7,6 +7,7 @@
 import os
 import shutil
 from datetime import datetime
+from functools import wraps
 
 from flask import Flask, request, session, render_template, redirect, url_for
 from werkzeug import secure_filename
@@ -136,6 +137,14 @@ def create_manga_list(manga_query):
 
     return result
 
+def requires_admin(func):
+    @wraps(func)
+    def wrapped_func(*args, **kwargs):
+        if not session.get("logged_in"):
+            return render_template("login.html", failed=False)
+        return func(*args, **kwargs)
+    return wrapped_func
+
 #===============================================================================
 # ** Views
 #===============================================================================
@@ -166,6 +175,7 @@ def login():
 
 # Add Manga
 @application.route("/reader/add_manga", methods=["POST"])
+@requires_admin
 def add_manga():
     name = request.form["manga_name"]
     url = request.form["manga_url"]
@@ -204,6 +214,7 @@ def add_manga():
 
 # Edit Manga
 @application.route("/reader/edit_manga", methods=["POST"])
+@requires_admin
 def edit_manga():
     # Find the manga using the old name
     old_name = request.form["manga_oldname"]
@@ -225,6 +236,7 @@ def edit_manga():
 
 # Add Chapter
 @application.route("/reader/add_chapter", methods=["POST"])
+@requires_admin
 def add_chapter():
     name = request.form["chapter_name"]
     num = 0
@@ -271,6 +283,7 @@ def add_chapter():
 
 # Delete Chapter
 @application.route("/reader/delete_chapter", methods=["POST"])
+@requires_admin
 def delete_chapter():
     manga = Manga.query.filter_by(
         name=request.form["chapter_delete_manga"]).first()
