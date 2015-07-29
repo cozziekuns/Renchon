@@ -146,6 +146,7 @@ div#navbar {
 
 ul#navbar_left {
 	display: inline-block;
+	padding-left: 0px;
 	-webkit-padding-start: 0px;
 	-moz-padding-start: 0px;
 }
