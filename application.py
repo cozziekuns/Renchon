@@ -241,6 +241,25 @@ def edit_manga():
     db.session.commit()
     return redirect(url_for("view_manga", manga=manga.url))
 
+# Delete Manga
+@application.route("/reader/delete_manga", methods=["POST"])
+@requires_admin
+def delete_manga():
+    # Find the manga using the old name
+    old_name = request.form["delete_manga_name"]
+    manga = Manga.query.filter_by(name=old_name).first()
+    print(manga.url)
+    # Delete the contents of the manga directory
+    delete_directory(manga.url)
+    # Delete all chapters that map to this manga
+    for chapter in manga.chapters.all():
+        db.session.delete(chapter)
+    # Update and redirect to the original page
+    db.session.delete(manga)
+    db.session.commit()
+
+    return redirect(url_for("admin"))
+
 # Add Chapter
 @application.route("/reader/add_chapter", methods=["POST"])
 @requires_admin

@@ -25,31 +25,49 @@
         <fieldset>
         <legend>Add Manga</legend>
         <label for="name">Manga Name: </label>
-        <input type="text" id="name" name="manga_name" size=30 required><br>
+        <input type="text" name="manga_name" size=30 required><br>
 
         <label for="url">URL: </label>
-        <input type="text" id="url" name="manga_url" size=30 required><br>
+        <input type="text" name="manga_url" size=30 required><br>
 
         <label for="author">Author: </label>
-        <input type="text" id="author" name="manga_author" size=30 required><br>
+        <input type="text" name="manga_author" size=30 required><br>
 
         <label for="artist">Arist: </label>
-        <input type="text" id="artist" name="manga_artist" size=30 required><br>
+        <input type="text" name="manga_artist" size=30 required><br>
 
         <label for="status">Status: </label>
-        <select id="status" name="manga_status">
+        <select name="manga_status">
           <option value="in_progress">In Progress</option>
           <option value="on_hold">On Hold</option>
           <option value="complete">Completed</option>
         </select><br>
 
         <label for="cover">Cover: </label>
-        <input type="file" id="cover" name="manga_cover" accept="image/*"
-            required><br>
+        <input type="file" name="manga_cover" accept="image/*" required><br>
 
         <label for="description">Description: </label>
         <textarea cols="80" rows="10" name="manga_description"
             required></textarea><br>
+
+        <input class="submit" type="submit" value="Submit">
+        </fieldset>
+
+      </form>
+
+      <form class=delete_manga action={{ url_for("delete_manga") }} method=post
+          enctype=multipart/form-data>
+
+        <fieldset>
+        <legend>Delete Manga</legend>
+
+        <label for="manga_delete">Manga Name: </label>
+        <select name="delete_manga_name">
+        {% for name in manga %}
+          <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+        </select>
+        <br>
 
         <input class="submit" type="submit" value="Submit">
         </fieldset>
@@ -63,7 +81,7 @@
         <legend>Add Chapter</legend>
 
         <label for="manga">Manga Name: </label>
-        <select id="manga" name="chapter_manga">
+        <select name="chapter_manga">
         {% for name in manga %}
           <option value="{{ name }}">{{ name }}</option>
         {% endfor %}
@@ -72,13 +90,13 @@
         <br>
 
         <label for="name">Chapter Name: </label>
-        <input type="text" id="name" name="chapter_name" size=25 required><br>
+        <input type="text" name="chapter_name" size=25 required><br>
 
         <label for="url">Chapter Number: </label>
-        <input type="text" id="url" name="chapter_num" size=25 required><br>
+        <input type="text" name="chapter_num" size=25 required><br>
 
         <label for="page">Upload Page Folder: </label>
-        <input type="file" id="page" name="chapter_pages" webkitdirectory
+        <input type="file" name="chapter_pages" webkitdirectory
             mozdirectory accept="image/*" required>
         <br>
 
