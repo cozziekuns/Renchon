@@ -459,7 +459,7 @@ div#summary input#cover {
 	line-height: 2em;
 }
 
-input.admin_form[type=submit] {
+.admin_form .submit {
 	margin-left: 12.25em;
 }
 
