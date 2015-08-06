@@ -163,11 +163,23 @@ def add_chapter(manga_name, chapter_name, chapter_num, pages):
         db.session.add(new_page)
         # Remember to increment curr_page
         curr_page += 1
+    zip_directory(manga_name, num_string, url)
     # Manga has been updated, so update the last updated date
     manga.last_updated = datetime.utcnow()
     # Add and commit to the database
     db.session.add(new_chapter)
     db.session.commit()
+
+def make_zip_filename(manga_name, chapter_num):
+    return manga_name.replace(" ", "_").lower() + "-chapter" + chapter_num
+
+def zip_directory(manga_name, chapter_num, url):
+    directory = application.config['UPLOAD_FOLDER'] + url + "/"
+    filename = make_zip_filename(manga_name, chapter_num)
+    # To make sure there is no recursive compression
+    shutil.make_archive(directory + "../" + filename, "zip", directory)
+    shutil.move(directory + "../" + filename + ".zip",
+            directory + filename + ".zip")
 
 def requires_admin(func):
     @wraps(func)
@@ -422,12 +434,10 @@ def view_page(manga=None, chapter=None):
     # Redirect to the summary page
     if not chapter:
         redirect(url_for("view_manga", manga=manga))
-
     # Make sure that a manga with that url exists
     manga = Manga.query.filter_by(url=manga).first()
     if manga is None:
         return render_template("404.html"), 404
-
     # Make sure that the manga has a chapter with that number
     try:
         chapter_num = float(chapter)
@@ -455,13 +465,11 @@ def view_page(manga=None, chapter=None):
         chapter_before = None
     else:
         chapter_before = chapters[chapters.index(chapter) + 1]
-
     # Find the chapter after this one, unless this is the last chapter
     if chapters.index(chapter) == 0:
         chapter_after = None
     else:
         chapter_after = chapters[chapters.index(chapter) - 1]
-
     # List automatically contains the most updated chapter
     contains_chapter = (chapter == latest_chapter)
 
@@ -482,11 +490,14 @@ def view_page(manga=None, chapter=None):
     else:
         next_chapter = -1
 
+    download_url = re.search(r"(.+\/).*?\Z", urls[0]).group(1)
+    download_url += make_zip_filename(manga.name, num_string) + ".zip"
+
     return render_template("reader.html", manga=manga.name,
                           chapter_name=chapter.name, chapter_num=num_string,
                           urls=urls, last_page=last_page.num,
                           chapters=chapter_list,
-                          next_chapter=next_chapter)
+                          next_chapter=next_chapter, download_url=download_url)
 
 # Page Not Found
 @application.errorhandler(404)
