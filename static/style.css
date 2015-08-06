@@ -20,10 +20,16 @@ input {
 }
 
 input[type=submit], input[type=button] {
-	padding-top: 0.25em;
-	padding-bottom: 0.25em;
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
+	padding: 0.5em;
+	color: rgba(255, 255, 255, 255);
+	background-color: rgba(64, 64, 64, 255);
+	border: none;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+	background-color: rgba(128, 128, 128, 255);
 }
 
 select {
@@ -125,17 +131,7 @@ div#fullscreen {
 #search_submit {
 	margin-top: -16px;
 	margin-right: 8px;
-	border: 0;
 	padding: 8px 12px;
-	color: rgba(255, 255, 255, 255);
-	background-color: rgba(64, 64, 64, 255);
-	-webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-
-#search_submit:hover {
-	background-color: rgba(128, 128, 128, 255);
 }
 
 /* Navigaton Bar Layout */
@@ -510,22 +506,13 @@ div#summary input#cover {
 	padding-bottom: 0.25em;
 }
 
-.hidden_input {
+input.close_chapter[type=button]  {
 	position: absolute;
-	visibility: hidden;
-}
-
-.close_chapter {
-	position: absolute;
-	color: rgba(255, 255, 255, 255);
-	background-color: rgba(80, 80, 80, 255);
 	font-family: "Voces", arial, sans-serif;
 	font-size: 14px;
-	border: none;
-	border-radius: 12px;
-	padding: 0 0.75em;
+	padding: 0.25em 0.75em;
 }
 
-.close_chapter:hover {
+input.close_chapter[type=button]:hover {
 	background-color: rgba(128, 128, 128, 255);
 }

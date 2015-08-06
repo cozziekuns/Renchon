@@ -15,6 +15,10 @@ function update_hidden_input() {
 
 function edit_text(e) {
 
+  // Remove the "Submit Changes" button from the form
+  form = document.getElementById("edit_manga");
+  form.removeChild(form.lastChild);
+
   // Transform all the text fields into input fields
   $(".manga_info").each(
     function(index, element) {
@@ -50,6 +54,14 @@ function save_text(e) {
   $(this).replaceWith("<input id='manga_edit' type='button'" +
       "value='Edit Manga Information'>")
   $("#manga_edit").click(edit_text);
+
+  // Re-add the "Submit Changes" button to the form
+  button = document.createElement("input");
+  button.setAttribute("type", "submit");
+  button.setAttribute("value", "Submit Changes");
+
+  form = document.getElementById("edit_manga");
+  form.appendChild(button);
 
 }
 

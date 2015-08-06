@@ -28,24 +28,24 @@
           <tr>
             <th>Admin: </th>
             <td>
-              <form action={{ url_for("edit_manga") }} method=post
-                  enctype=multipart/form-data>
-                <input class="hidden_input" name="manga_oldname"
+              <form id="edit_manga" action={{ url_for("edit_manga") }}
+                  method=post enctype=multipart/form-data>
+                <input class="hidden_input" type="hidden" name="manga_oldname"
                     value="{{ manga }}"/>
-                <input class="hidden_input" name="manga_name" />
-                <input class="hidden_input" name="manga_author" />
-                <input class="hidden_input" name="manga_artist" />
-                <input class="hidden_input" name="manga_description" />
+                <input class="hidden_input" type="hidden" name="manga_name">
+                <input class="hidden_input" type="hidden" name="manga_author">
+                <input class="hidden_input" type="hidden" name="manga_artist">
+                <input class="hidden_input" type="hidden"
+                    name="manga_description">
                 <input id="manga_edit" type="button"
                     value="Edit Manga Information">
                 <br>
-                <input type="button" name="manga_cover" value="Edit Cover Photo"
-                    onclick="edit_cover_photo()" />
+                <input type="button" name="manga_cover"
+                    value="Edit Cover Photo" onclick="edit_cover_photo()">
                 <input id="cover" type="file" name="manga_cover"
-                    accept="image/*" />
+                    accept="image/*">
                 <br>
-                <input type="submit" value="Submit Changes" />
-              </form>
+                <input type="submit" value="Submit Changes"></form>
             </td>
           </tr>
         {% endif %}
