@@ -1,29 +1,21 @@
-{% extends "layout.html" %}
-{% block startbody %}
+{% extends "base.html" %}
+{% block content %}
 
-    {% if error %}
-      <p class=error><strong>Error:</strong> {{ error }}
-    {% endif %}
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
 
-    <div class="admin_sidebar">
-      <h1>Admin Panel</h1>
-      <h2>Manga Tools</h2>
-      <ul>
-        <li>Add Manga</li>
-        <li>Delete Manga</li>
-        <li>Add Chapter</li>
-        <li>Delete Chapter</li>
-        <li>Edit Chapter Info</li>
-      </ul>
-    </div>
+  <img id="banner" src="{{ url_for('static', filename='banner.png') }}">
+
+  <div id="main_wrapper">
+
+    <div id="heading"><span id="heading">Add Manga</span></div>
 
     <div class="admin_form">
 
       <form class=add_manga action={{ url_for("add_manga") }} method=post
           enctype=multipart/form-data>
 
-        <fieldset>
-        <legend>Add Manga</legend>
         <label for="name">Manga Name: </label>
         <input type="text" name="manga_name" size=30 required><br>
 
@@ -50,16 +42,15 @@
         <textarea cols="80" rows="10" name="manga_description"
             required></textarea><br>
 
-        <input class="submit" type="submit" value="Submit">
-        </fieldset>
+        <input type="submit" value="Submit">
 
       </form>
 
-      <form class=delete_manga action={{ url_for("delete_manga") }} method=post
-          enctype=multipart/form-data>
+      <br>
+      <div id="heading"><span id="heading">Delete Manga</span></div>
 
-        <fieldset>
-        <legend>Delete Manga</legend>
+      <form class=delete_manga action={{ url_for("delete_manga") }}
+          method=post enctype=multipart/form-data>
 
         <label for="manga_delete">Manga Name: </label>
         <select name="delete_manga_name">
@@ -69,18 +60,22 @@
         </select>
         <br>
 
-        <input class="submit" type="submit" value="Submit">
-        </fieldset>
+        <input type="submit" value="Submit">
 
+      </form>
+
+      <br>
+      <div id="heading"><span id="heading">Logout</span></div>
+      <form action={{ url_for("logout") }}>
+        <input type="submit" value="Logout">
       </form>
 
     </div>
 
-    <script src="/static/admin.js"></script>
+    <div id="back_to_top">
+      <a href="#">↑ Back to top</a>
+    </div>
 
-    <script type="text/javascript">
-      chapters = {{ chapter_list|tojson|safe }};
-      create_chapter_select();
-    </script>
+  </div>
 
 {% endblock %}

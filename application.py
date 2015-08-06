@@ -217,6 +217,13 @@ def login():
     else:
         return render_template("login.html", failed=True)
 
+# Admin Logout
+@application.route("/reader/admin/logout")
+@requires_admin
+def logout():
+    session.pop("logged_in", None)
+    return redirect(url_for("index"))
+
 # Add Manga
 @application.route("/reader/add_manga", methods=["POST"])
 @requires_admin
@@ -256,7 +263,7 @@ def add_manga():
     db.session.add(new_manga)
     db.session.commit()
 
-    return redirect(url_for("admin"))
+    return redirect(url_for("view_manga", manga=url))
 
 # Edit Manga
 @application.route("/reader/edit_manga", methods=["POST"])

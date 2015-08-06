@@ -93,14 +93,14 @@ function delete_chapter(manga, chapter) {
 
 }
 
-function add_close_button(div, onclick) {
+function add_close_button(element, onclick) {
 
   button = document.createElement("input");
   button.className = "close_chapter";
   button.setAttribute("type", "button");
   button.setAttribute("value", "x");
   button.setAttribute("onclick", onclick);
-  div.appendChild(button);
+  element.appendChild(button);
 
 }
 
@@ -113,15 +113,15 @@ function add_label_to_element(element, name, text) {
 
 }
 
-function add_input_to_div(div, type, name, text) {
+function add_input_to_element(element, type, name, text) {
 
   text_input = document.createElement("input");
   text_input.setAttribute("type", type);
   text_input.setAttribute("name", name);
 
-  add_label_to_element(div, name, text);
-  div.appendChild(text_input);
-  div.appendChild(document.createElement("br"));
+  add_label_to_element(element, name, text);
+  element.appendChild(text_input);
+  element.appendChild(document.createElement("br"));
 
 }
 
@@ -153,11 +153,12 @@ function create_chapter_dialog() {
   // Wrap everything in a div element
   div = document.createElement("div");
   div.setAttribute("id", "add_chapter_" + mangle);
+  div.setAttribute("overflow", "auto");
   form.insertBefore(div, document.getElementById("add_chapter_button"));
 
   add_close_button(div, "delete_chapter_dialog(" + mangle + ")");
-  add_input_to_div(div, "text", "chapter_name_" + mangle, "Chapter Name:");
-  add_input_to_div(div, "number", "chapter_num_" + mangle, "Chapter Number:");
+  add_input_to_element(div, "text", "chapter_name_" + mangle, "Chapter Name:");
+  add_input_to_element(div, "number", "chapter_num_" + mangle, "Chapter Number:");
   add_file_upload(div, "chapter_pages_" + mangle, "Upload Folder:");
   div.appendChild(document.createElement("br"));
 

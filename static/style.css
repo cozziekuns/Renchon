@@ -120,12 +120,9 @@ div#fullscreen {
 	height: 24px;
   border: none;
   font-size: 10pt;
-  color: #63717f;
+  color: rgba(96, 112, 128, 255);
 	padding: 0 16px;
 	margin-right: 16px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
 }
 
 #search_submit {
@@ -454,13 +451,6 @@ div#summary input#cover {
 	margin-left: 6.75em;
 }
 
-/* Admin Tools */
-
-.admin_form {
-	min-width: 860px;
-	width: 80%;
-}
-
 .admin_form label {
 	display: inline-block;
 	width: 9.5em;
@@ -469,41 +459,8 @@ div#summary input#cover {
 	line-height: 2em;
 }
 
-.admin_form .submit {
+input.admin_form[type=submit] {
 	margin-left: 12.25em;
-}
-
-.admin_sidebar {
-	float: right;
-	min-width: 215px;
-	width: 20%;
-	border: 1px solid rgba(0, 0, 0, 255);
-}
-
-.admin_sidebar h1 {
-	font-size: 18px;
-	font-weight: normal;
-	text-align: center;
-	padding: 4px;
-	color: rgba(255, 255, 255, 255);
-	background-color: rgba(80, 80, 80, 255);
-	margin-top: 0;
-}
-
-.admin_sidebar h2 {
-	font-size: 1em;
-	font-weight: normal;
-	text-align: center;
-}
-
-.admin_sidebar ul {
-	padding-left: 1em;
-}
-
-.admin_sidebar ul li {
-	list-style-type: none;
-	padding-top: 0.25em;
-	padding-bottom: 0.25em;
 }
 
 input.close_chapter[type=button]  {
