@@ -54,6 +54,16 @@
 
     <div id="heading"><span id="heading">Chapter List</span></div>
 
+    {% if session.logged_in %}
+      <form id="add_chapter" class="admin_form"
+          action={{ url_for("add_chapter_bulk") }} method=post
+          enctype=multipart/form-data>
+        <input type="hidden" name="manga_name" value="{{ manga }}">
+        <input id="add_chapter_button" type="button" value="+ Add New Chapter"
+            onclick="create_chapter_dialog()">
+      </form>
+    {% endif %}
+
     <table id="manga_list">
       <tr>
         <th>Chapter</th>

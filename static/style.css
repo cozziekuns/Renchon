@@ -45,6 +45,7 @@ div#heading {
 	padding: 4px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 1em;
 	border: 1px solid rgba(32, 32, 32, 255);
 }
 
@@ -379,7 +380,7 @@ div#back_to_top {
 /* Manga Summary */
 
 div#summary {
-	margin: 2em auto;
+	margin: 1em auto;
 	min-height: 480px;
 }
 
@@ -512,4 +513,19 @@ div#summary input#cover {
 .hidden_input {
 	position: absolute;
 	visibility: hidden;
+}
+
+.close_chapter {
+	position: absolute;
+	color: rgba(255, 255, 255, 255);
+	background-color: rgba(80, 80, 80, 255);
+	font-family: "Voces", arial, sans-serif;
+	font-size: 14px;
+	border: none;
+	border-radius: 12px;
+	padding: 0 0.75em;
+}
+
+.close_chapter:hover {
+	background-color: rgba(128, 128, 128, 255);
 }

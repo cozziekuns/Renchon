@@ -5,7 +5,9 @@
 #=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 
 import os
+import re
 import shutil
+
 from datetime import datetime
 from functools import wraps
 
@@ -138,6 +140,35 @@ def create_manga_list(manga_query):
 
     return result
 
+def add_chapter(manga_name, chapter_name, chapter_num, pages):
+    # Ensure that chapter_num is a float
+    chapter_num = float(chapter_num)
+    manga = Manga.query.filter_by(name=manga_name).first()
+    new_chapter = Chapter(chapter_name, chapter_num, manga)
+    # Representation is different if its an integer
+    num_string = chapter_to_string(chapter_num)
+    # Make a new folder for the chapter
+    url = new_chapter.manga.url + "/Chapter_" + num_string
+    # Rename and add all the chapter pages
+    curr_page = 1
+    for page in pages:
+        # Skip resource forks
+        if "__MACOSX" in page.filename:
+            continue
+        filename = rename(page, "%03d" % curr_page)
+        # Make sure nothing that isn't an image file doesn't get through.
+        if not allowed_file(page.filename):
+            continue
+        new_page = Page(curr_page, save_file(page, url, filename), new_chapter)
+        db.session.add(new_page)
+        # Remember to increment curr_page
+        curr_page += 1
+    # Manga has been updated, so update the last updated date
+    manga.last_updated = datetime.utcnow()
+    # Add and commit to the database
+    db.session.add(new_chapter)
+    db.session.commit()
+
 def requires_admin(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
@@ -263,59 +294,42 @@ def delete_manga():
 # Add Chapter
 @application.route("/reader/add_chapter", methods=["POST"])
 @requires_admin
-def add_chapter():
-    name = request.form["chapter_name"]
-    num = 0
-
-    # Convert the chapter number to a float (we need a float for stuff like
-    # omakes)
-    try:
-        num = float(request.form["chapter_num"])
-    except ValueError:
-        return render_template('admin.html', error="Invalid Chapter Number.")
-
-    manga = Manga.query.filter_by(name=request.form["chapter_manga"]).first()
-    new_chapter = Chapter(name, float(num), manga)
-
-    # Rename and add all the chapter pages
-    curr_page = 1
-
-    # Representation is different if its a number
-    num_string = chapter_to_string(num)
-
-    # Make a new folder for the chapter
-    url = new_chapter.manga.url + "/Chapter_" + num_string
-    pages = request.files.getlist("chapter_pages")
-    for page in pages:
-        # Skip resource forks
-        if "__MACOSX" in page.filename:
+def add_chapter_bulk():
+    chapter_hash = {}
+    manga_name = request.form["manga_name"]
+    # Dump all the metadata into the hash
+    for key in request.form.keys():
+        if key == "manga_name":
             continue
-        filename = rename(page, "%03d" % curr_page)
-        # Make sure nothing that isn't an image file doesn't get through.
-        if not allowed_file(page.filename):
-            continue
-        new_page = Page(curr_page, save_file(page, url, filename), new_chapter)
-        db.session.add(new_page)
-        # Remember to increment curr_page
-        curr_page += 1
-
-    # Manga has been updated, so update the last updated date
-    manga.last_updated = datetime.utcnow()
-
-    db.session.add(new_chapter)
-    db.session.commit()
-
-    return redirect(url_for("admin"))
+        index = re.search(r"_(\d+)\Z", key).group(1)
+        offset = len(index) + 1
+        index = float(index)
+        if not index in chapter_hash:
+            chapter_hash[index] = {}
+        chapter_hash[index][key[:-offset]] = request.form[key]
+    # Iterating over twice is kind of ugly, but it works
+    for key in request.files.keys():
+        index = re.search(r"_(\d+)\Z", key).group(1)
+        offset = len(index) + 1
+        index = float(index)
+        chapter_hash[index][key[:-offset]] = request.files.getlist(key)
+    # Now iterate over the entire dict, and add each chapter one-by-one
+    for index in chapter_hash.keys():
+        add_chapter(manga_name, chapter_hash[index]["chapter_name"],
+            chapter_hash[index]["chapter_num"],
+            chapter_hash[index]["chapter_pages"])
+    # Return back to the original page
+    manga = Manga.query.filter_by(name=manga_name).first()
+    return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Chapter
 @application.route("/reader/delete_chapter", methods=["POST"])
 @requires_admin
 def delete_chapter():
-    print("post_request")
-    manga = Manga.query.filter_by(
-        name=request.form["chapter_delete_manga"]).first()
-    chapter = manga.chapters.filter_by(
-      num=request.form["chapter_delete_chapter"]).first()
+    manga_name = request.form["chapter_delete_manga"]
+    chapter_num = request.form["chapter_delete_chapter"]
+    manga = Manga.query.filter_by(name=manga_name).first()
+    chapter = manga.chapters.filter_by(num=chapter_num).first()
 
     num_string = chapter_to_string(chapter.num)
     url = chapter.manga.url + "/Chapter_" + num_string

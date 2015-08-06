@@ -74,61 +74,6 @@
 
       </form>
 
-      <form class=add_chapter action={{ url_for("add_chapter") }} method=post
-          enctype=multipart/form-data>
-
-        <fieldset>
-        <legend>Add Chapter</legend>
-
-        <label for="manga">Manga Name: </label>
-        <select name="chapter_manga">
-        {% for name in manga %}
-          <option value="{{ name }}">{{ name }}</option>
-        {% endfor %}
-        </select>
-
-        <br>
-
-        <label for="name">Chapter Name: </label>
-        <input type="text" name="chapter_name" size=25 required><br>
-
-        <label for="url">Chapter Number: </label>
-        <input type="text" name="chapter_num" size=25 required><br>
-
-        <label for="page">Upload Page Folder: </label>
-        <input type="file" name="chapter_pages" webkitdirectory
-            mozdirectory accept="image/*" required>
-        <br>
-
-        <input class="submit" type="submit" value="Submit">
-        </fieldset>
-
-      </form>
-
-      <form class=delete_chapter action={{ url_for("delete_chapter") }}
-          method=post>
-
-        <fieldset>
-        <legend>Delete Chapter</legend>
-
-        <label for="manga_delete">Manga Name: </label>
-        <select id="manga_delete" name="chapter_delete_manga"
-            onchange="create_chapter_select()">
-        {% for name in manga %}
-          <option value="{{ name }}">{{ name }}</option>
-        {% endfor %}
-        </select>
-        <br>
-
-        <label for="chapter_delete">Chapter: </label>
-        <select id="chapter_delete" name="chapter_delete_chapter"></select>
-        <br>
-
-        <input class="submit" type="submit" value="Submit">
-        </fieldset>
-
-      </form>
-
     </div>
 
     <script src="/static/admin.js"></script>
