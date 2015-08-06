@@ -98,7 +98,7 @@ function add_close_button(div, onclick) {
   button = document.createElement("input");
   button.className = "close_chapter";
   button.setAttribute("type", "button");
-  button.setAttribute("value", "X");
+  button.setAttribute("value", "x");
   button.setAttribute("onclick", onclick);
   div.appendChild(button);
 
