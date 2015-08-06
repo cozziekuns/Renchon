@@ -57,6 +57,9 @@
     <table id="manga_list">
       <tr>
         <th>Chapter</th>
+        {% if session.logged_in %}
+          <th>Admin</th>
+        {% endif %}
         <th id="manga_list_date">Date Submitted</th>
       </tr>
       {% for chapter in chapter_list %}
@@ -66,6 +69,12 @@
           <tr>
         {% endif %}
           <td><a href="{{ chapter_urls[loop.index0] }}">{{ chapter }}</a></td>
+          {% if session.logged_in %}
+            <td><a href="#"
+                   onclick="delete_chapter('{{ manga }}', '{{ chapter }}')">
+              Delete Chapter
+            </a></td>
+          {% endif %}
           <td id="manga_list_date">{{ date_str[loop.index0] }}</td>
         </tr>
       {% endfor %}
@@ -79,6 +88,7 @@
 
   {% if session.logged_in %}
     <script type="text/javascript">
+      var delete_chapter_path = "{{  url_for("delete_chapter") }}"
       $("#cover").change(function() { read_url(this); })
       $("#manga_edit").click(edit_text);
       update_hidden_input();

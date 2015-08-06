@@ -311,6 +311,7 @@ def add_chapter():
 @application.route("/reader/delete_chapter", methods=["POST"])
 @requires_admin
 def delete_chapter():
+    print("post_request")
     manga = Manga.query.filter_by(
         name=request.form["chapter_delete_manga"]).first()
     chapter = manga.chapters.filter_by(
@@ -323,7 +324,7 @@ def delete_chapter():
     db.session.delete(chapter)
     db.session.commit()
 
-    return redirect(url_for("admin"))
+    return redirect(url_for("view_manga", manga=manga.url))
 
 # Index
 @application.route("/reader")

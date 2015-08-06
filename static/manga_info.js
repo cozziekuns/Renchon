@@ -66,3 +66,36 @@ function read_url(input) {
 function edit_cover_photo() {
   document.getElementById("cover").click();
 }
+
+function delete_chapter(manga, chapter) {
+
+  re = /^Chapter\s(\d+(?:\.\d+)?)/;
+  chapter_num = re.exec(chapter)[1];
+  json = {chapter_delete_manga: manga,
+          chapter_delete_chapter: chapter_num}
+
+  send_post_request(delete_chapter_path, json)
+
+}
+
+function send_post_request(path, params, method) {
+
+    method = method || "post";
+
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
