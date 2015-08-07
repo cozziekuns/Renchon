@@ -120,6 +120,8 @@ target/
 # SQL Databases
 *.db
 
+admin.py
+
 # Anything in a folder inside static
 static/*/
 
