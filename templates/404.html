@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>404 Page Not Found...</h1>
+  <img id="banner" src="{{ url_for('static', filename='banner.jpg') }}">
+  <div id="main_wrapper">
+    <div id="four_oh_four">
+      <h1>404 Not Found</h1>
+      <hr>
+      <img src="{{ url_for('static', filename='404.jpg') }}">
+    </div>
+  </div>
 {% endblock %}

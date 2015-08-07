@@ -72,7 +72,7 @@ div#content {
 
 div#main_wrapper {
 	width: 90%;
-	background-color: rbga(255, 255, 255, 255);
+	background-color: rgba(255, 255, 255, 255);
 	margin: -5px auto 0;
 	padding: 2em 1em 0em;
 }
@@ -472,4 +472,16 @@ input.close_chapter[type=button]  {
 
 input.close_chapter[type=button]:hover {
 	background-color: rgba(128, 128, 128, 255);
+}
+
+#four_oh_four img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 2em;
+}
+
+#four_oh_four h1 {
+	text-align: center;
+	margin-top: 0;
 }

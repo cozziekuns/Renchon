@@ -194,7 +194,7 @@ def requires_admin(func):
 #===============================================================================
 
 # Admin
-@application.route("/reader/admin")
+@application.route("/admin")
 def admin():
     if session.get("logged_in"):
         manga = Manga.query.order_by("last_updated desc").all()
@@ -207,7 +207,7 @@ def admin():
         return render_template("login.html", failed=False)
 
 # Admin login
-@application.route("/reader/admin/login", methods=["POST"])
+@application.route("/admin/login", methods=["POST"])
 def login():
     username = request.form["username"]
     password = request.form["password"]
@@ -225,7 +225,7 @@ def logout():
     return redirect(url_for("index"))
 
 # Add Manga
-@application.route("/reader/add_manga", methods=["POST"])
+@application.route("/add_manga", methods=["POST"])
 @requires_admin
 def add_manga():
     name = request.form["manga_name"]
@@ -266,7 +266,7 @@ def add_manga():
     return redirect(url_for("view_manga", manga=url))
 
 # Edit Manga
-@application.route("/reader/edit_manga", methods=["POST"])
+@application.route("/edit_manga", methods=["POST"])
 @requires_admin
 def edit_manga():
     # Find the manga using the old name
@@ -292,7 +292,7 @@ def edit_manga():
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Manga
-@application.route("/reader/delete_manga", methods=["POST"])
+@application.route("/delete_manga", methods=["POST"])
 @requires_admin
 def delete_manga():
     # Find the manga using the old name
@@ -311,7 +311,7 @@ def delete_manga():
     return redirect(url_for("admin"))
 
 # Add Chapter
-@application.route("/reader/add_chapter", methods=["POST"])
+@application.route("/add_chapter", methods=["POST"])
 @requires_admin
 def add_chapter_bulk():
     chapter_hash = {}
@@ -342,7 +342,7 @@ def add_chapter_bulk():
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Chapter
-@application.route("/reader/delete_chapter", methods=["POST"])
+@application.route("/delete_chapter", methods=["POST"])
 @requires_admin
 def delete_chapter():
     manga_name = request.form["chapter_delete_manga"]
@@ -360,7 +360,7 @@ def delete_chapter():
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Index
-@application.route("/reader")
+@application.route("/")
 def index():
     # Get all of the things to be displayed in this view
     manga_list = []
@@ -387,7 +387,7 @@ def index():
                             date_str=date_str)
 
 # Manga Summary Page
-@application.route("/reader/<manga>")
+@application.route("/<manga>")
 def view_manga(manga=None):
     chapter_list = []
     chapter_urls = []
@@ -418,7 +418,7 @@ def view_manga(manga=None):
             chapter_urls=chapter_urls, date_str=date_str)
 
 # Search
-@application.route("/reader/search", methods=["POST"])
+@application.route("/search", methods=["POST"])
 def search():
     query = request.form["search"]
     manga_list = Manga.query.filter(Manga.name.contains(query) |
@@ -429,14 +429,14 @@ def search():
     return render_template("search.html", **kwargs)
 
 # Manga List
-@application.route("/reader/manga_list")
+@application.route("/manga_list")
 def manga_list():
     # Create a list of all manga ordered by their name
     kwargs = create_manga_list(Manga.query.order_by("name"))
     return render_template("manga_list.html", **kwargs)
 
 # Reader
-@application.route("/reader/<manga>/<chapter>")
+@application.route("/<manga>/<chapter>")
 def view_page(manga=None, chapter=None):
     # Redirect to the summary page
     if not chapter:
