@@ -2,7 +2,7 @@
 {% block real_content %}
 
   <div id="main_wrapper">
-    <div id="heading"><span id="heading">Manga</span></div>
+    <div class="heading"><span>Manga</span></div>
     <div id="summary">
       <img id="cover_photo" src="{{ cover_url }}">
       <table>
@@ -50,7 +50,7 @@
       </table>
     </div>
 
-    <div id="heading"><span id="heading">Chapter List</span></div>
+    <div class="heading"><span>Chapter List</span></div>
 
     {% if session.logged_in %}
       <form id="add_chapter" class="admin_form"

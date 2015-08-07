@@ -42,7 +42,7 @@ textarea {
 
 /* Heading */
 
-div#heading {
+.heading {
 	font-family: "Voces", arial, sans-serif;
 	font-size: 20px;
 	color: rgba(255, 255, 255, 255);
@@ -55,7 +55,7 @@ div#heading {
 	border: 1px solid rgba(32, 32, 32, 255);
 }
 
-span#heading {
+.heading span {
 	margin-left: 16px;
 }
 
