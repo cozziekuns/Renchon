@@ -40,6 +40,13 @@ textarea {
 	font-family: "Open Sans", arial, sans-serif;
 }
 
+hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 /* Heading */
 
 .heading {
@@ -491,4 +498,10 @@ input.close_chapter[type=button]:hover {
 
 #four_oh_four h1 {
 	margin-top: 0;
+}
+
+.twitter-timeline {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }

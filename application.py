@@ -384,7 +384,8 @@ def index():
     return render_template("index.html", manga_list=manga_list,
                             cover_urls=cover_urls, chapters=chapters,
                             manga_urls=manga_urls, chapter_urls=chapter_urls,
-                            date_str=date_str)
+                            date_str=date_str, twitter_link=TWITTER_LINK,
+                            twitter_widget_id=TWITTER_WIDGET_ID,)
 
 # Manga Summary Page
 @application.route("/<manga>")

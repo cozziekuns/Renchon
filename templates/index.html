@@ -19,16 +19,17 @@
       {% endfor %}
     </div>
 
-    <div class="heading"><span>Twitter</span></div>
+    <hr>
 
-    <a class="twitter-timeline"
-        href="https://twitter.com/renchon_anon"
-        data-widget-id="629790590780096512"
-        width="600"
-        height="300">
-      Tweets by @renchon_anon
-    </a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <div class="twitter">
+      <a class="twitter-timeline"
+          href="{{ twitter_link }}"
+          data-widget-id="{{ twitter_widget_id }}"
+          width="600"
+          height="300">
+        Tweets by @renchon_anon
+      </a>
+    </div>
 
     <div id="back_to_top">
       <a href="#">↑ Back to top</a>
@@ -37,5 +38,6 @@
   </div>
 
   <script src="{{ url_for('static', filename='index.js') }}"></script>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 {% endblock %}
