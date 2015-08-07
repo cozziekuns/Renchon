@@ -474,6 +474,14 @@ input.close_chapter[type=button]:hover {
 	background-color: rgba(128, 128, 128, 255);
 }
 
+#four_oh_four {
+	text-align: center;
+}
+
+#four_oh_four p {
+	margin-bottom: 4em;
+}
+
 #four_oh_four img {
 	display: block;
 	margin-left: auto;
@@ -482,6 +490,5 @@ input.close_chapter[type=button]:hover {
 }
 
 #four_oh_four h1 {
-	text-align: center;
 	margin-top: 0;
 }
