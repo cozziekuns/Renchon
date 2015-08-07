@@ -1,11 +1,9 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "banner_base.html" %}
+{% block real_content %}
 
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
-
-  <img id="banner" src="{{ url_for('static', filename='banner.jpg') }}">
 
   <div id="main_wrapper">
 
