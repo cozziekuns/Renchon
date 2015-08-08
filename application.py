@@ -270,6 +270,14 @@ def add_manga():
     db.session.add(new_manga)
     db.session.commit()
 
+    # Send a tweet saying that the manga has been created
+    if SEND_TWEETS:
+        url = request.url_root[:-1]
+        url += url_for("view_manga", manga=manga.url)
+        text = 'A new manga "' + manga.name + '" has been released! Check it'
+        text += ' out at ' + url
+        twitter_api.update_status(status=text)
+
     return redirect(url_for("view_manga", manga=url))
 
 # Edit Manga
@@ -296,13 +304,6 @@ def edit_manga():
         manga.cover = save_file(cover_file, manga.url, cover_filename)
     # Update and redirect to the original page
     db.session.commit()
-    # Send a tweet saying that the manga has been created
-    if SEND_TWEETS:
-        url = request.url_root[:-1]
-        url += url_for("view_manga", manga=manga.url)
-        text = 'A new manga "' + manga.name + '" has been released! Check it'
-        text += ' out at ' + url
-        twitter_api.update_status(status=text)
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Manga
