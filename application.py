@@ -349,25 +349,23 @@ def add_chapter_bulk():
         offset = len(index) + 1
         index = float(index)
         chapter_hash[index][key[:-offset]] = request.files.getlist(key)
+    # Now iterate over the entire dict, and add each chapter one-by-one
+    # starting from the chapter with the largest chapter number
+    best_index = 0
+    key_func = lambda index: float(chapter_hash[index]["chapter_num"])
+    for index in sorted(chapter_hash.keys(), key=key_func):
+        add_chapter(manga_name, chapter_hash[index]["chapter_name"],
+            chapter_hash[index]["chapter_num"],
+            chapter_hash[index]["chapter_pages"])
+        best_index = index
     # Send a tweet saying that the manga has been updated
     if SEND_TWEETS:
-        best_index = 0
-        latest_chapter = 0
-        for index in chapter_hash.keys():
-            if float(chapter_hash[index]["chapter_num"]) > latest_chapter:
-                best_index = index
-                latest_chapter = float(chapter_hash[index]["chapter_num"])
         latest_chapter = str(chapter_hash[best_index]["chapter_num"])
         url = request.url_root[:-1]
         url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
         text = manga_name + " has been updated! Chapter "
         text += latest_chapter + " - " + url
         twitter_api.update_status(status=text)
-    # Now iterate over the entire dict, and add each chapter one-by-one
-    for index in chapter_hash.keys():
-        add_chapter(manga_name, chapter_hash[index]["chapter_name"],
-            chapter_hash[index]["chapter_num"],
-            chapter_hash[index]["chapter_pages"])
     # Return back to the original page
     return redirect(url_for("view_manga", manga=manga.url))
 
