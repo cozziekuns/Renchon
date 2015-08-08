@@ -296,6 +296,13 @@ def edit_manga():
         manga.cover = save_file(cover_file, manga.url, cover_filename)
     # Update and redirect to the original page
     db.session.commit()
+    # Send a tweet saying that the manga has been created
+    if SEND_TWEETS:
+        url = request.url_root[:-1]
+        url += url_for("view_manga", manga=manga.url)
+        text = 'A new manga "' + manga.name + '" has been released! Check it'
+        text += ' out at ' + url
+        twitter_api.update_status(status=text)
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Manga
@@ -341,7 +348,7 @@ def add_chapter_bulk():
         offset = len(index) + 1
         index = float(index)
         chapter_hash[index][key[:-offset]] = request.files.getlist(key)
-    # Send a tweet saying that has been updated
+    # Send a tweet saying that the manga has been updated
     if SEND_TWEETS:
         best_index = 0
         latest_chapter = 0
@@ -354,7 +361,7 @@ def add_chapter_bulk():
         url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
         text = manga_name + " has been updated! Chapter "
         text += latest_chapter + " - " + url
-        twitter_api.update_status(text)
+        twitter_api.update_status(status=text)
     # Now iterate over the entire dict, and add each chapter one-by-one
     for index in chapter_hash.keys():
         add_chapter(manga_name, chapter_hash[index]["chapter_name"],
