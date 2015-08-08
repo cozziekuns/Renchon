@@ -274,7 +274,7 @@ def add_manga():
     if SEND_TWEETS:
         url = request.url_root[:-1]
         url += url_for("view_manga", manga=manga.url)
-        text = 'A new manga "' + manga.name + '" has been released! Check it'
+        text = 'A new manga "' + name + '" has been released! Check it'
         text += ' out at ' + url
         twitter_api.update_status(status=text)
 
