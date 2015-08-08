@@ -7,6 +7,7 @@
 import os
 import re
 import shutil
+import tweepy
 
 from datetime import datetime
 from functools import wraps
@@ -15,7 +16,9 @@ from flask import Flask, request, session, render_template, redirect, \
     url_for, escape
 from werkzeug import secure_filename
 from models import db, Manga, Chapter, Page
-from admin import ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY
+from admin import ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY, SEND_TWEETS, \
+    TWITTER_WIDGET_ID, TWITTER_LINK, CONSUMER_KEY, CONSUMER_SECRET, \
+    ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 
 UPLOAD_FOLDER = "static/"
 ALLOWED_EXTENSIONS = set(["png", "jpg", "jpeg"])
@@ -24,6 +27,10 @@ application = Flask(__name__)
 application.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tmp/reader.db"
 application.secret_key = SECRET_KEY
+
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+twitter_api = tweepy.API(auth)
 
 db.init_app(application)
 
@@ -316,6 +323,8 @@ def delete_manga():
 def add_chapter_bulk():
     chapter_hash = {}
     manga_name = request.form["manga_name"]
+    # Get the manga object for later use
+    manga = Manga.query.filter_by(name=manga_name).first()
     # Dump all the metadata into the hash
     for key in request.form.keys():
         if key == "manga_name":
@@ -332,13 +341,26 @@ def add_chapter_bulk():
         offset = len(index) + 1
         index = float(index)
         chapter_hash[index][key[:-offset]] = request.files.getlist(key)
+    # Send a tweet saying that has been updated
+    if SEND_TWEETS:
+        best_index = 0
+        latest_chapter = 0
+        for index in chapter_hash.keys():
+            if float(chapter_hash[index]["chapter_num"]) > latest_chapter:
+                best_index = index
+                latest_chapter = float(chapter_hash[index]["chapter_num"])
+        latest_chapter = str(chapter_hash[best_index]["chapter_num"])
+        url = request.url_root[:-1]
+        url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
+        text = manga_name + " has been updated! Chapter "
+        text += latest_chapter + " - " + url
+        twitter_api.update_status(text)
     # Now iterate over the entire dict, and add each chapter one-by-one
     for index in chapter_hash.keys():
         add_chapter(manga_name, chapter_hash[index]["chapter_name"],
             chapter_hash[index]["chapter_num"],
             chapter_hash[index]["chapter_pages"])
     # Return back to the original page
-    manga = Manga.query.filter_by(name=manga_name).first()
     return redirect(url_for("view_manga", manga=manga.url))
 
 # Delete Chapter
