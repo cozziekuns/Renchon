@@ -22,6 +22,7 @@ function move_tiles() {
     if (i % columns == 0) {
       tiles[i].style.marginLeft = new_margin.toString() + "px"
       tiles[i].style.marginRight = "32px";
+      tiles[i].style.clear = "both";
     } else if (i % columns == columns - 1) {
       tiles[i].style.marginLeft = "32px";
       tiles[i].style.marginRight = new_margin.toString() + "px"
