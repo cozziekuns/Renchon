@@ -13,7 +13,11 @@
 
       <li>
         <ul class="navbar_list subnav_ul" id="subnav_list">
-          <li id="subnav_title">{{ manga }}</li>
+          <li id="subnav_title">
+            <a href="{{ url_for('view_manga', manga=manga_url) }}">
+              {{ manga }}
+            </a>
+          </li>
           <li id="subnav_divider">|</li>
           <li class="subnav_dropdown">
             Chapter {{ chapter_num }}: {{ chapter_name }} ▾

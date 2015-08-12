@@ -413,7 +413,7 @@ def index():
                             cover_urls=cover_urls, chapters=chapters,
                             manga_urls=manga_urls, chapter_urls=chapter_urls,
                             date_str=date_str, twitter_link=TWITTER_LINK,
-                            twitter_widget_id=TWITTER_WIDGET_ID,)
+                            twitter_widget_id=TWITTER_WIDGET_ID)
 
 # Manga Summary Page
 @application.route("/<manga>")
@@ -529,7 +529,7 @@ def view_page(manga=None, chapter=None):
     download_url = re.search(r"(.+\/).*?\Z", urls[0]).group(1)
     download_url += make_zip_filename(manga.name, num_string) + ".zip"
 
-    return render_template("reader.html", manga=manga.name,
+    return render_template("reader.html", manga=manga.name, manga_url=manga.url,
                           chapter_name=chapter.name, chapter_num=num_string,
                           urls=urls, last_page=last_page.num,
                           chapters=chapter_list,
