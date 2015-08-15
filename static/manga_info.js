@@ -140,6 +140,7 @@ function add_submit_element() {
 
 function add_chapter_element(chapter_num) {
   var chapter_list = document.getElementById("chapter_list");
+  var list_element = document.createElement("li");
   var chapter_div = document.createElement("div");
   chapter_div.style.width = "360px";
   chapter_div.style.height = "360px";
@@ -148,7 +149,8 @@ function add_chapter_element(chapter_num) {
   chapter_div.style.borderRadius = "10px";
   chapter_div.style.display = "inline-block";
   add_chapter_image_to_element(chapter_div, chapter_num);
-  chapter_list.appendChild(chapter_div);
+  list_element.appendChild(chapter_div);
+  chapter_list.appendChild(list_element);
 }
 
 function add_label_to_element(element, name, text) {
@@ -185,7 +187,14 @@ function add_chapter_image_to_element(element, chapter_num) {
     element.appendChild(image);
     add_chapter_info_to_element(element, chapter_num);
   };
-  reader.readAsDataURL(chapter_data[chapter_num][0]);
+  for (var i = 0; i < chapter_data[chapter_num].length; i++) {
+    var filename_ary = chapter_data[chapter_num][i].name.split(".");
+    var ext = filename_ary[filename_ary.length - 1];
+    if (ext == "jpg" || ext == "jpeg" || ext == "png") {
+      reader.readAsDataURL(chapter_data[chapter_num][i]);
+      break;
+    }
+  }
 }
 
 function add_chapter_info_to_element(element, chapter_num) {

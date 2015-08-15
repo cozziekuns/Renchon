@@ -544,3 +544,13 @@ span.chapter_upload {
 	text-align: center;
 	padding: 1em;
 }
+
+#chapter_list {
+	padding: 0;
+	text-align: center;
+}
+
+#chapter_list li {
+	display: inline-block;
+	padding: 0;
+}
