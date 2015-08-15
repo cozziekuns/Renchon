@@ -53,13 +53,11 @@
     <div class="heading"><span>Chapter List</span></div>
 
     {% if session.logged_in %}
-      <form id="add_chapter" class="admin_form"
-          action={{ url_for("add_chapter_bulk") }} method=post
-          enctype=multipart/form-data>
-        <input type="hidden" name="manga_name" value="{{ manga }}">
-        <input id="add_chapter_button" type="button" value="+ Add New Chapter"
-            onclick="create_chapter_dialog()">
-      </form>
+      <div id="chapter_list" class="admin_form">
+        <div id="chapter_dropzone" ondrop="drop_chapter(event)"
+             ondragover="allow_drop(event)">Drag and drop chapters here.</div>
+      </div>
+      <div id="chapter_submit"></div>
     {% endif %}
 
     <table id="manga_list">
@@ -96,8 +94,10 @@
 
   {% if session.logged_in %}
     <script type="text/javascript">
-      var delete_chapter_path = "{{  url_for("delete_chapter") }}"
-      $("#cover").change(function() { read_url(this); })
+      var manga_name = "{{ manga }}";
+      var add_chapter_path = "{{ url_for('add_chapter_bulk') }}";
+      var delete_chapter_path = "{{  url_for('delete_chapter') }}";
+      $("#cover").change(function() { read_url(this); });
       $("#manga_edit").click(edit_text);
       update_hidden_input();
     </script>

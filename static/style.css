@@ -8,11 +8,11 @@ html, body {
 
 a:link, a:visited {
 	text-decoration: none;
-	color: rgba(95, 154, 208, 255);
+	color: rgba(95, 154, 208, 1.0);
 }
 
 a:hover {
-	color: rgba(224, 96, 0, 255);
+	color: rgba(224, 96, 0, 1.0);
 }
 
 input {
@@ -23,13 +23,13 @@ input[type=submit], input[type=button] {
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
 	padding: 0.5em;
-	color: rgba(255, 255, 255, 255);
-	background-color: rgba(64, 64, 64, 255);
+	color: rgba(255, 255, 255, 1.0);
+	background-color: rgba(64, 64, 64, 1.0);
 	border: none;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
-	background-color: rgba(128, 128, 128, 255);
+	background-color: rgba(128, 128, 128, 1.0);
 }
 
 select {
@@ -52,14 +52,14 @@ hr {
 .heading {
 	font-family: "Voces", arial, sans-serif;
 	font-size: 20px;
-	color: rgba(255, 255, 255, 255);
+	color: rgba(255, 255, 255, 1.0);
 	text-align: center;
-	background-color: rgba(80, 80, 80, 255);
+	background-color: rgba(80, 80, 80, 1.0);
 	padding: 4px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 1em;
-	border: 1px solid rgba(32, 32, 32, 255);
+	border: 1px solid rgba(32, 32, 32, 1.0);
 }
 
 .heading span {
@@ -79,7 +79,7 @@ div#content {
 
 div#main_wrapper {
 	width: 90%;
-	background-color: rgba(255, 255, 255, 255);
+	background-color: rgba(255, 255, 255, 1.0);
 	margin: -5px auto 0;
 	padding: 2em 1em 0em;
 }
@@ -89,8 +89,8 @@ div#main_wrapper {
 div#footer {
 	height: 176px;
 	position: absolute;
-	background-color: rgba(64, 64, 64, 255);
-	color: rgba(192, 192, 192, 255);
+	background-color: rgba(64, 64, 64, 1.0);
+	color: rgba(192, 192, 192, 1.0);
 	padding: 0em 3em;
 	bottom: 0;
 }
@@ -127,7 +127,7 @@ div#fullscreen {
 	height: 24px;
   border: none;
   font-size: 10pt;
-  color: rgba(96, 112, 128, 255);
+  color: rgba(96, 112, 128, 1.0);
 	padding: 0 16px;
 	margin-right: 16px;
 }
@@ -141,7 +141,7 @@ div#fullscreen {
 /* Navigaton Bar Layout */
 
 div#navbar {
-	background-color: rgba(80, 80, 80, 255);
+	background-color: rgba(80, 80, 80, 1.0);
 	overflow: auto;
 }
 
@@ -171,13 +171,13 @@ ul#navbar_right {
 
 .navbar_title {
 	padding: 16px 32px 16px 32px;
-	color: rgba(255, 255, 255, 255);
+	color: rgba(255, 255, 255, 1.0);
 	margin-right: -5px;
-	background-color: rgba(128, 112, 160, 255);
+	background-color: rgba(128, 112, 160, 1.0);
 }
 
 .navbar_title:hover {
-	color: rgba(255, 255, 160, 255);
+	color: rgba(255, 255, 160, 1.0);
 }
 
 /* Navigation Bar Buttons */
@@ -188,24 +188,24 @@ ul#navbar_right {
 }
 
 .nav_button:hover {
-	background-color: rgba(216, 216, 216, 255);
+	background-color: rgba(216, 216, 216, 1.0);
 }
 
 .main_nav {
 	margin-left: 0px;
 	margin-right: 0px;
 	padding: 16px 16px;
-	color: rgba(255, 255, 255, 255);
+	color: rgba(255, 255, 255, 1.0);
 }
 
 .main_nav:hover {
-	color: rgba(224, 96, 0, 255);
+	color: rgba(224, 96, 0, 1.0);
 }
 
 /* Sub-nav Bar Layout */
 
 #subnav {
-	background-color: rgba(255, 255, 255, 255);
+	background-color: rgba(255, 255, 255, 1.0);
 	padding-top: 1em;
 	padding-bottom: 1em;
 }
@@ -233,7 +233,7 @@ ul#navbar_right {
 }
 
 li#subnav_divider {
-	color: rgba(216, 216, 216, 255);
+	color: rgba(216, 216, 216, 1.0);
 }
 
 /* Dropdown */
@@ -243,12 +243,12 @@ ul#subnav_list li {
 }
 
 .subnav_dropdown {
-	border: 1px solid rgba(160, 160, 160, 255);
+	border: 1px solid rgba(160, 160, 160, 1.0);
 	padding: 8px;
 }
 
 .subnav_dropdown:hover {
-	background-color: rgba(216, 216, 216, 255);
+	background-color: rgba(216, 216, 216, 1.0);
 }
 
 .subnav_dropdown ul {
@@ -256,7 +256,7 @@ ul#subnav_list li {
 	margin: 8px 0 0 -9px;
 	padding: 0;
 	position: absolute;
-	border: 1px solid rgba(160, 160, 160, 255);
+	border: 1px solid rgba(160, 160, 160, 1.0);
 	background-color: white;
 }
 
@@ -271,15 +271,13 @@ ul#subnav_list li {
 }
 
 .subnav_dropdown ul a li:hover {
-	background-color: rgba(216, 216, 216, 255);
+	background-color: rgba(216, 216, 216, 1.0);
 }
 
 /* Reader */
 
 img#manga {
-	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 1.0);
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -290,9 +288,7 @@ img#manga {
 
 img#banner {
 	width: 100%;
-	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 1.0);
 }
 
 /* Manga Tiles */
@@ -322,14 +318,12 @@ img#banner {
 	margin: 8px;
 	margin-left: auto;
 	margin-right: auto;
-	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 1.0);
 }
 
 .date {
 	font-size: 14px;
-	color: rgba(96, 96, 96, 255);
+	color: rgba(96, 96, 96, 1.0);
 }
 
 /* Manga List */
@@ -339,14 +333,14 @@ img#banner {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 1em;
-	border: 1px solid rgba(128, 112, 160, 255);
+	border: 1px solid rgba(128, 112, 160, 1.0);
 	border-collapse: collapse;
 }
 
 #manga_list th {
 	text-align: left;
-	color: rgba(255, 255, 255, 255);
-	background-color: rgba(128, 112, 160, 255);
+	color: rgba(255, 255, 255, 1.0);
+	background-color: rgba(128, 112, 160, 1.0);
 	font-weight: normal;
 	padding-left: 0.5em;
 	padding-top: 4px;
@@ -354,14 +348,14 @@ img#banner {
 }
 
 #manga_list td {
-	background-color: rgba(232, 216, 255, 255);
+	background-color: rgba(232, 216, 255, 1.0);
 	padding-left: 0.5em;
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
 
 #manga_list tr.alt td {
-  background-color: rgba(216, 192, 255, 255);
+  background-color: rgba(216, 192, 255, 1.0);
 }
 
 th#manga_list_date, td#manga_list_date {
@@ -392,9 +386,7 @@ div#summary img {
 	max-width: 320px;
 	max-height: 480px;
 	margin-right: 3em;
-	-moz-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	-webkit-box-shadow: 0 0 5px rgba(32, 32, 32, 128);
-	box-shadow: 0 0 5px rgba(32, 32, 32, 128);
+	box-shadow: 0 0 5px rgba(32, 32, 32, 1.0);
 }
 
 div#summary table {
@@ -406,12 +398,12 @@ div#summary th {
 	padding: 0.5em 0;
 	text-align: right;
 	vertical-align: top;
-	border-bottom: 1px solid rgba(192, 192, 192, 255);
+	border-bottom: 1px solid rgba(192, 192, 192, 1.0);
 }
 
 div#summary td {
 	padding: 0.5em 1em;
-	border-bottom: 1px solid rgba(192, 192, 192, 255);
+	border-bottom: 1px solid rgba(192, 192, 192, 1.0);
 }
 
 div#summary input#cover {
@@ -436,8 +428,8 @@ div#summary input#cover {
 	font-size: 1.2em;
 	font-weight: normal;
 	text-align: center;
-	background-color: rgba(80, 80, 80, 255);
-	color: rgba(255, 255, 255, 255);
+	background-color: rgba(80, 80, 80, 1.0);
+	color: rgba(255, 255, 255, 1.0);
 }
 
 .login label {
@@ -451,7 +443,7 @@ div#summary input#cover {
 .login p#warning {
 	font-size: 0.8em;
 	text-align: center;
-	background-color: rgba(255, 192, 192, 255);
+	background-color: rgba(255, 192, 192, 1.0);
 }
 
 .login p#submit {
@@ -478,7 +470,7 @@ input.close_chapter[type=button]  {
 }
 
 input.close_chapter[type=button]:hover {
-	background-color: rgba(128, 128, 128, 255);
+	background-color: rgba(128, 128, 128, 1.0);
 }
 
 #four_oh_four {
@@ -504,4 +496,51 @@ input.close_chapter[type=button]:hover {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+#chapter_dropzone {
+	width: 600px;
+	height: 200px;
+	border: 5px dashed rgba(64, 64, 64, 1.0);
+	color: rgba(128, 128, 128, 1.0);
+	font-size: 32px;
+	line-height: 200px;
+	text-align: center;
+	margin: 16px auto;
+}
+
+#chapter_dropzone.dragover {
+	color: rgba(128, 112, 160, 1.0);
+  border-color: rgba(128, 112, 160, 1.0);
+}
+
+#chapter_submit {
+	margin: 1em;
+}
+
+span.chapter_submit {
+	display: block;
+	width: 240px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	color: rgba(255, 255, 255, 1.0);
+	background-color: rgba(64, 64, 64, 1.0);
+	border-radius: 10px;
+	padding: 1em;
+	cursor: pointer;
+}
+
+span.chapter_submit:hover {
+	background-color: rgba(128, 128, 128, 1.0);
+}
+
+span.chapter_upload {
+	display: block;
+	width: 240px;
+	font-size: 24px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	padding: 1em;
 }

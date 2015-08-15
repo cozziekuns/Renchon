@@ -188,6 +188,10 @@ def zip_directory(manga_name, chapter_num, url):
     shutil.move(directory + "../" + filename + ".zip",
             directory + filename + ".zip")
 
+def get_chapter_from_url(url):
+    url_list = str.split(url, "/")
+    return float(re.search(r"(\d+)\Z", url_list[-2]).group(1))
+
 def requires_admin(func):
     @wraps(func)
     def wrapped_func(*args, **kwargs):
@@ -325,6 +329,7 @@ def delete_manga():
 
     return redirect(url_for("admin"))
 
+"""
 # Add Chapter
 @application.route("/add_chapter", methods=["POST"])
 @requires_admin
@@ -366,6 +371,20 @@ def add_chapter_bulk():
         text = manga_name + " has been updated! Chapter "
         text += latest_chapter + " - " + url
         twitter_api.update_status(status=text)
+    # Return back to the original page
+    return redirect(url_for("view_manga", manga=manga.url))
+"""
+
+# Add Chapter
+@application.route("/add_chapter", methods=["POST"])
+@requires_admin
+def add_chapter_bulk():
+    chapter_hash = {}
+    manga_name = request.form["manga_name"]
+    # Get the manga object for later use
+    manga = Manga.query.filter_by(name=manga_name).first()
+    for key in request.files.keys():
+        print(key);
     # Return back to the original page
     return redirect(url_for("view_manga", manga=manga.url))
 
