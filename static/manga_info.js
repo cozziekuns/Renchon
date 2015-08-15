@@ -249,6 +249,8 @@ function add_chapter_info_to_form() {
 }
 
 function upload_chapters() {
+  var dropzone = document.getElementById("chapter_dropzone");
+  dropzone.parentNode.removeChild(dropzone);
   create_form_data();
   var request = new XMLHttpRequest();
   var submit_span = document.getElementById("chapter_submit_button");
@@ -257,7 +259,7 @@ function upload_chapters() {
   request.onload = function() {
     submit_span.innerHTML = "Upload complete!";
   };
-  request.upload.onprogress = function(e) {
+  request.upload.onprogress = function(event) {
     if (event.lengthComputable) {
       var complete = (event.loaded / event.total * 100 | 0);
       submit_span.innerHTML = "Uploaded: " + complete + "%";
