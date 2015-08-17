@@ -130,12 +130,14 @@ function enter_into_chapter_data(entry, chapter_num) {
 
 function add_submit_element() {
   var chapter_submit = document.getElementById("chapter_submit");
-  var submit_span = document.createElement("span");
-  submit_span.id = "chapter_submit_button"
-  submit_span.className = "chapter_submit";
-  submit_span.onclick = upload_chapters;
-  submit_span.innerHTML = "Submit All Chapters";
-  chapter_submit.appendChild(submit_span);
+  if (!chapter_submit.innerHTML) {
+    var submit_span = document.createElement("span");
+    submit_span.id = "chapter_submit_button"
+    submit_span.className = "chapter_submit";
+    submit_span.onclick = upload_chapters;
+    submit_span.innerHTML = "Submit All Chapters";
+    chapter_submit.appendChild(submit_span);
+  }
 }
 
 function add_chapter_element(chapter_num) {
