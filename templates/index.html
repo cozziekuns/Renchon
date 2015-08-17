@@ -4,19 +4,23 @@
   <div id="main_wrapper">
     <div class="heading"><span>Latest Updated Manga</span></div>
     <div class="container">
-      {% for manga in manga_list %}
-        <div class="manga_tile">
-          <span class="manga_title">{{ manga }}</span>
-          <a href="{{ manga_urls[loop.index0] }}">
-            <img class="tile_cover" src="{{ cover_urls[loop.index0] }}">
-          </a>
-          <a href="{{ chapter_urls[loop.index0] }}">
-            {{ chapters[loop.index0] }}
-          </a>
-          <br>
-          <span class="date">Updated: {{ date_str[loop.index0] }}</span>
-        </div>
-      {% endfor %}
+      <ul id="chapter_list">
+        {% for manga in manga_list %}
+          <li>
+            <div class="manga_tile">
+              <span class="manga_title">{{ manga }}</span>
+              <a href="{{ manga_urls[loop.index0] }}">
+                <img class="tile_cover" src="{{ cover_urls[loop.index0] }}">
+              </a>
+              <a href="{{ chapter_urls[loop.index0] }}">
+                {{ chapters[loop.index0] }}
+              </a>
+              <br>
+              <span class="date">Updated: {{ date_str[loop.index0] }}</span>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
 
     <hr>
@@ -37,7 +41,6 @@
 
   </div>
 
-  <script src="{{ url_for('static', filename='index.js') }}"></script>
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 {% endblock %}
