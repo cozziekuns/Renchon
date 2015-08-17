@@ -1,7 +1,3 @@
-var form_data = null;
-var chapter_data = {};
-var total_pages = {};
-
 function update_hidden_input() {
   $(".hidden_input").each(function(index, element) {
     if (index > 0) {
@@ -68,6 +64,12 @@ function delete_chapter(manga, chapter) {
   send_post_request(delete_chapter_path, json)
 }
 
+/* Drag and Drop */
+
+var form_data = null;
+var chapter_data = {};
+var total_pages = {};
+
 function allow_drop(event) {
   event.preventDefault();
 }
@@ -97,6 +99,9 @@ function traverse_filesystem(entry) {
     if (!chapter_data.hasOwnProperty(chapter_num)) {
       chapter_data[chapter_num] = [];
       total_pages[chapter_num] = 0;
+    } else {
+      // Disallow duplicate chapters
+      return;
     }
   }
   reader.readEntries(function(entries) {
@@ -209,7 +214,7 @@ function ready_to_submit() {
   return true;
 }
 
-/* Chapter Helper Methods */
+/* Drag and Drop Helper Methods */
 
 function init_dropzone() {
   document.getElementById("chapter_dropzone").ondragenter = function() {
