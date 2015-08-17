@@ -206,7 +206,7 @@ function add_chapter_info_to_element(element, chapter_num) {
 }
 
 function ready_to_submit() {
-  for (chapter_num in total_pages) {
+  for (var chapter_num in total_pages) {
     if (chapter_data[chapter_num].length < total_pages[chapter_num]) {
       return false;
     }
