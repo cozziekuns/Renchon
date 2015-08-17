@@ -1,53 +1,40 @@
-function update_hidden_input() {
-  $(".hidden_input").each(function(index, element) {
-    if (index > 0) {
-      $(this).val($(".manga_info")[index - 1].innerHTML)
-    }
-  })
-}
-
-function edit_text(e) {
+function edit_text() {
   // Remove the "Submit Changes" button from the form
   var form = document.getElementById("edit_manga");
   form.removeChild(form.lastChild);
   // Transform all the text fields into input fields
-  $(".manga_info").each(
-    function(index, element) {
-      var text = element.innerHTML.replace(/<br>/g, "\n");
-      if (index == 3) {
-        element.innerHTML = "<textarea cols='80' rows='10'" +
-            "name='manga_description' required>" + text + "</textarea>";
-      } else {
-        element.innerHTML = "<input type='text' value='" + text +
-            "' required  />";
-      }
+  var manga_info = document.getElementsByClassName("manga_info");
+  for (var i = 0; i < manga_info.length; i++) {
+    var text = manga_info[i].innerHTML.replace(/<br>/g, "\n");
+    if (i == 3) {
+      manga_info[i].innerHTML = "<textarea cols='80' rows='10'" +
+          "name='manga_description' required>" + text + "</textarea>";
+    } else {
+      manga_info[i].innerHTML = "<input type='text' value='" + text +
+          "' required  />";
     }
-  )
-  $(this).replaceWith("<input id='manga_edit' type='button'" +
-      "value='Save Manga Information'>")
-  $("#manga_edit").click(save_text);
+  }
+  // Change the function of the edit button
+  var edit_button = document.getElementById("manga_edit");
+  edit_button.value = "Save Manga Information";
+  edit_button.onclick = save_text;
 }
 
-function save_text(e) {
+function save_text() {
   // Transform all the input fields back into text fields
-  $(".manga_info").each(
-    function(index, element) {
-      var text = $(this).children().val();
-      element.innerHTML = text.replace(/\r\n|\r|\n/g, "<br>");
-    }
-  )
-
-  update_hidden_input();
-
-  $(this).replaceWith("<input id='manga_edit' type='button'" +
-      "value='Edit Manga Information'>")
-  $("#manga_edit").click(edit_text);
-
+  var manga_info = document.getElementsByClassName("manga_info");
+  for (var i = 0; i < manga_info.length; i++) {
+    var text = manga_info[i].firstChild.value;
+    manga_info[i].innerHTML = text.replace(/\r\n|\r|\n/g, "<br>");
+  }
+  var edit_button = document.getElementById("manga_edit");
+  edit_button.value = "Edit Manga Information";
+  edit_button.onclick = edit_text;
   // Re-add the "Submit Changes" button to the form
   var button = document.createElement("input");
-  button.setAttribute("type", "submit");
-  button.setAttribute("value", "Submit Changes");
-
+  button.type = "button";
+  button.value = "Submit Changes";
+  button.onclick = submit_manga_info;
   var form = document.getElementById("edit_manga");
   form.appendChild(button);
 }
@@ -56,12 +43,26 @@ function edit_cover_photo() {
   document.getElementById("cover").click();
 }
 
+function submit_manga_info() {
+  var request = {}
+  var manga_info = document.getElementsByClassName("manga_info");
+  var cover = document.getElementById("cover");
+  request["manga_oldname"] = manga_name;
+  request["manga_name"] = manga_info[0].innerHTML;
+  request["manga_author"] = manga_info[1].innerHTML;
+  request["manga_artist"] = manga_info[2].innerHTML;
+  request["manga_description"] = manga_info[3].innerHTML;
+  form = create_proxy_form(edit_manga_path, request);
+  form.appendChild(cover);
+  form.submit();
+}
+
 function delete_chapter(manga, chapter) {
-  re = /^Chapter\s(\d+(?:\.\d+)?)/;
-  chapter_num = re.exec(chapter)[1];
-  json = {chapter_delete_manga: manga,
-          chapter_delete_chapter: chapter_num}
-  send_post_request(delete_chapter_path, json)
+  var re = /^Chapter\s(\d+(?:\.\d+)?)/;
+  var chapter_num = re.exec(chapter)[1];
+  var request = {chapter_delete_manga: manga,
+      chapter_delete_chapter: chapter_num};
+  send_post_request(delete_chapter_path, request);
 }
 
 /* Drag and Drop */
@@ -285,11 +286,11 @@ function upload_chapters() {
 
 /* General Helper Methods */
 
-function send_post_request(path, params) {
+function create_proxy_form(path, params) {
   var form = document.createElement("form");
   form.setAttribute("method", "post");
   form.setAttribute("action", path);
-
+  form.setAttribute("enctype", "multipart/form-data");
   for (var key in params) {
     if (params.hasOwnProperty(key)) {
       hidden_field = document.createElement("input");
@@ -299,10 +300,25 @@ function send_post_request(path, params) {
       form.appendChild(hidden_field);
     }
   }
-
   document.body.appendChild(form);
+  return form;
+}
+
+function send_post_request(path, params) {
+  form = create_proxy_form(path, params);
   form.submit();
 }
 
-// Initialisation
+function read_url(input) {
+  if (input.files && input.files[0]) {
+    reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById("cover_photo").src = e.target.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+/* Initialisation */
+
 init_dropzone();
