@@ -205,9 +205,15 @@ def init_chapter_hash(chapter_hash, form):
         chapter_hash[chapter_num_key][inner_key] = form[key]
 
 def store_files_into_hash(chapter_hash, files):
+    def key_func(f):
+        name = ".".join(str.split(f.filename, ".")[:-1])
+        try:
+            return float(name)
+        except ValueError:
+            return float("inf")
     for key in files.keys():
         chapter_hash[key]["pages"] = []
-        key_func = lambda f: f.filename
+        print(sorted(files.getlist(key), key=key_func))
         for f in sorted(files.getlist(key), key=key_func):
             chapter_hash[key]["pages"].append(f)
 
