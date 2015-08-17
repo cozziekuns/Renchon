@@ -72,7 +72,6 @@ def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
     chapter_limit = 7
     if not chapter_before:
         chapter_limit += 1
-
     # Recreate the list based on the position of the chapter we're currently
     # on
     if len(chapter_list) > chapter_limit:
@@ -83,18 +82,15 @@ def recreate_chapter_list(chapter_list, chapter_before, latest_chapter):
             if len(temp) == chapter_limit:
                 break
         chapter_list = temp
-
     # Add the latest chapter
     chapter_list.insert(0, [chapter_to_string(latest_chapter.num),
         latest_chapter.name + " (Latest)"])
-
     # Add the chapter before this chapter, unless this chapter is the earliest
     # chapter
     if chapter_before:
         info = [chapter_to_string(chapter_before.num), chapter_before.name]
         if not info in chapter_list:
             chapter_list.append(info)
-
     return chapter_list
 
 def update_chapter_list(chapter, manga, chapters, chapter_urls):
@@ -151,6 +147,9 @@ def add_chapter(manga_name, chapter_name, chapter_num, pages):
     # Ensure that chapter_num is a float
     chapter_num = float(chapter_num)
     manga = Manga.query.filter_by(name=manga_name).first()
+    # Ensure that the manga does not have a chapter with the same number
+    if manga.chapters.filter_by(num=chapter_num).first():
+        return
     new_chapter = Chapter(chapter_name, chapter_num, manga)
     # Representation is different if its an integer
     num_string = chapter_to_string(chapter_num)
@@ -191,6 +190,43 @@ def zip_directory(manga_name, chapter_num, url):
 def get_chapter_from_url(url):
     url_list = str.split(url, "/")
     return float(re.search(r"(\d+)\Z", url_list[-2]).group(1))
+
+def init_chapter_hash(chapter_hash, form):
+    for key in form.keys():
+        if key == "manga_name":
+            continue
+        chapter_num_key = str.split(key, "_")[-1]
+        if not chapter_num_key in chapter_hash:
+            chapter_hash[chapter_num_key] = {}
+        if "chapter_name_" in key:
+            inner_key = "name"
+        elif "chapter_num_" in key:
+            inner_key = "num"
+        chapter_hash[chapter_num_key][inner_key] = form[key]
+
+def store_files_into_hash(chapter_hash, files):
+    for key in files.keys():
+        chapter_hash[key]["pages"] = []
+        key_func = lambda f: f.filename
+        for f in sorted(files.getlist(key), key=key_func):
+            chapter_hash[key]["pages"].append(f)
+
+def add_all_chapters(manga_name, chapter_hash):
+    best_index = 0
+    key_func = lambda index: float(chapter_hash[index]["num"])
+    for index in sorted(chapter_hash.keys(), key=key_func):
+        add_chapter(manga_name, chapter_hash[index]["name"],
+            chapter_hash[index]["num"],
+            chapter_hash[index]["pages"])
+        best_index = index
+    # Send a tweet saying that the manga has been updated
+    if SEND_TWEETS:
+        latest_chapter = str(chapter_hash[best_index]["num"])
+        url = request.url_root[:-1]
+        url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
+        text = manga_name + " has been updated! Chapter "
+        text += latest_chapter + " - " + url
+        twitter_api.update_status(status=text)
 
 def requires_admin(func):
     @wraps(func)
@@ -329,62 +365,16 @@ def delete_manga():
 
     return redirect(url_for("admin"))
 
-"""
 # Add Chapter
 @application.route("/add_chapter", methods=["POST"])
 @requires_admin
 def add_chapter_bulk():
     chapter_hash = {}
     manga_name = request.form["manga_name"]
-    # Get the manga object for later use
     manga = Manga.query.filter_by(name=manga_name).first()
-    # Dump all the metadata into the hash
-    for key in request.form.keys():
-        if key == "manga_name":
-            continue
-        index = re.search(r"_(\d+)\Z", key).group(1)
-        offset = len(index) + 1
-        index = float(index)
-        if not index in chapter_hash:
-            chapter_hash[index] = {}
-        chapter_hash[index][key[:-offset]] = request.form[key]
-    # Iterating over twice is kind of ugly, but it works
-    for key in request.files.keys():
-        index = re.search(r"_(\d+)\Z", key).group(1)
-        offset = len(index) + 1
-        index = float(index)
-        chapter_hash[index][key[:-offset]] = request.files.getlist(key)
-    # Now iterate over the entire dict, and add each chapter one-by-one
-    # starting from the chapter with the largest chapter number
-    best_index = 0
-    key_func = lambda index: float(chapter_hash[index]["chapter_num"])
-    for index in sorted(chapter_hash.keys(), key=key_func):
-        add_chapter(manga_name, chapter_hash[index]["chapter_name"],
-            chapter_hash[index]["chapter_num"],
-            chapter_hash[index]["chapter_pages"])
-        best_index = index
-    # Send a tweet saying that the manga has been updated
-    if SEND_TWEETS:
-        latest_chapter = str(chapter_hash[best_index]["chapter_num"])
-        url = request.url_root[:-1]
-        url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
-        text = manga_name + " has been updated! Chapter "
-        text += latest_chapter + " - " + url
-        twitter_api.update_status(status=text)
-    # Return back to the original page
-    return redirect(url_for("view_manga", manga=manga.url))
-"""
-
-# Add Chapter
-@application.route("/add_chapter", methods=["POST"])
-@requires_admin
-def add_chapter_bulk():
-    chapter_hash = {}
-    manga_name = request.form["manga_name"]
-    # Get the manga object for later use
-    manga = Manga.query.filter_by(name=manga_name).first()
-    for key in request.files.keys():
-        print(key);
+    init_chapter_hash(chapter_hash, request.form)
+    store_files_into_hash(chapter_hash, request.files)
+    add_all_chapters(manga_name, chapter_hash)
     # Return back to the original page
     return redirect(url_for("view_manga", manga=manga.url))
 
@@ -503,7 +493,6 @@ def view_page(manga=None, chapter=None):
     chapter = results.first()
     if chapter is None:
         return render_template("404.html"), 404
-
     last_page = chapter.pages.order_by("-num").first()
 
     # Not going to do this in JS

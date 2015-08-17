@@ -536,8 +536,7 @@ span.chapter_submit:hover {
 
 span.chapter_upload {
 	display: block;
-	width: 240px;
-	font-size: 24px;
+	font-size: 18px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;

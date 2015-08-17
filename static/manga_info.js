@@ -249,8 +249,7 @@ function add_chapter_info_to_form() {
     form_data.append("chapter_num_" + property, num);
     form_data.append("chapter_name_" + property, name);
     for (var i = 0; i < chapter_data[property].length; i++) {
-      form_data.append(property.toString() + "/" + i,
-          chapter_data[property][i]);
+      form_data.append(property.toString(), chapter_data[property][i]);
     }
   }
 }
@@ -264,14 +263,23 @@ function upload_chapters() {
   submit_span.className = "chapter_upload";
   request.open('POST', '/add_chapter');
   request.onload = function() {
-    submit_span.innerHTML = "Upload complete!";
+    text = "Chapters have been updated!"
+    text += " Please refresh the page to see the updates.";
+    submit_span.innerHTML = text;
   };
   request.upload.onprogress = function(event) {
     if (event.lengthComputable) {
       var complete = (event.loaded / event.total * 100 | 0);
-      submit_span.innerHTML = "Uploaded: " + complete + "%";
+      if (complete == 100) {
+        text = "Upload complete! Girls do their best now and are preparing.";
+        text += " Please wait warmly until the server is ready...";
+        submit_span.innerHTML = text;
+      } else {
+        submit_span.innerHTML = "Uploaded: " + complete + "%";
+      }
     }
   }
+  submit_span.innerHTML = "Uploaded: 0%";
   request.send(form_data);
 }
 
