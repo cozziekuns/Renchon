@@ -554,3 +554,12 @@ span.chapter_upload {
 	display: inline-block;
 	padding: 0;
 }
+
+div.chapter_admin_box {
+	width: 360px;
+	height: 360px;
+	margin: 0.5em;
+	border: 3px dotted rgba(128, 128, 128, 1.0);
+	border-radius: 10px;
+	display: inline-block;
+}

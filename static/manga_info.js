@@ -144,12 +144,7 @@ function add_chapter_element(chapter_num) {
   var chapter_list = document.getElementById("chapter_list");
   var list_element = document.createElement("li");
   var chapter_div = document.createElement("div");
-  chapter_div.style.width = "360px";
-  chapter_div.style.height = "360px";
-  chapter_div.style.margin = "0.5em";
-  chapter_div.style.border = "3px dotted rgba(128, 128, 128, 1.0)";
-  chapter_div.style.borderRadius = "10px";
-  chapter_div.style.display = "inline-block";
+  chapter_div.className = "chapter_admin_box";
   add_chapter_image_to_element(chapter_div, chapter_num);
   list_element.appendChild(chapter_div);
   chapter_list.appendChild(list_element);
@@ -181,11 +176,7 @@ function add_chapter_image_to_element(element, chapter_num) {
   reader.onload = function(event) {
     var image = new Image();
     image.src = event.target.result;
-    image.style.display = "block";
-    image.style.width = "200px";
-    image.style.height = "200px";
-    image.style.margin = "2.5em auto 1em";
-    image.style.boxShadow = "0 0 5px rgba(32, 32, 32, 1.0)";
+    image.className = "chapter_admin_box";
     element.appendChild(image);
     add_chapter_info_to_element(element, chapter_num);
   };
