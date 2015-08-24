@@ -87,18 +87,18 @@ div#main_wrapper {
 /* Footer */
 
 div#footer {
+	width: 100%;
 	height: 176px;
 	position: absolute;
 	background-color: rgba(64, 64, 64, 1.0);
 	color: rgba(192, 192, 192, 1.0);
-	padding: 0em 3em;
 	bottom: 0;
 }
 
 span#footer_inner {
 	width: 80%;
 	display: inline-block;
-	margin-top: 2em;
+	margin: 2em 3em 0 0;
 	font-family: Lora;
 	font-size: 12px;
 }
