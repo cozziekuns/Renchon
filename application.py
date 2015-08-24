@@ -168,7 +168,7 @@ def add_chapter(manga, chapter_name, chapter_num, pages):
         db.session.add(new_page)
         # Remember to increment curr_page
         curr_page += 1
-    zip_directory(manga.name, num_string, url)
+    zip_directory(manga, num_string, url)
     # Manga has been updated, so update the last updated date
     manga.last_updated = datetime.utcnow()
     # Add and commit to the database
