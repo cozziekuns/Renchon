@@ -538,7 +538,7 @@ def view_page(manga=None, chapter=None):
         next_chapter = -1
 
     download_url = re.search(r"(.+\/).*?\Z", urls[0]).group(1)
-    download_url += make_zip_filename(manga.name, num_string) + ".zip"
+    download_url += make_zip_filename(manga, num_string) + ".zip"
 
     return render_template("reader.html", manga=manga.name, manga_url=manga.url,
                           chapter_name=chapter.name, chapter_num=num_string,
