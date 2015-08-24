@@ -212,7 +212,6 @@ def store_files_into_hash(chapter_hash, files):
             return float("inf")
     for key in files.keys():
         chapter_hash[key]["pages"] = []
-        print(sorted(files.getlist(key), key=key_func))
         for f in sorted(files.getlist(key), key=key_func):
             chapter_hash[key]["pages"].append(f)
 
@@ -358,7 +357,6 @@ def delete_manga():
     # Find the manga using the old name
     old_name = request.form["delete_manga_name"]
     manga = Manga.query.filter_by(name=old_name).first()
-    print(manga.url)
     # Delete the contents of the manga directory
     delete_directory(manga.url)
     # Delete all chapters that map to this manga
