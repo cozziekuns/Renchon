@@ -143,10 +143,9 @@ def create_manga_list(manga_query):
 
     return result
 
-def add_chapter(manga_name, chapter_name, chapter_num, pages):
+def add_chapter(manga, chapter_name, chapter_num, pages):
     # Ensure that chapter_num is a float
     chapter_num = float(chapter_num)
-    manga = Manga.query.filter_by(name=manga_name).first()
     # Ensure that the manga does not have a chapter with the same number
     if manga.chapters.filter_by(num=chapter_num).first():
         return
@@ -169,19 +168,19 @@ def add_chapter(manga_name, chapter_name, chapter_num, pages):
         db.session.add(new_page)
         # Remember to increment curr_page
         curr_page += 1
-    zip_directory(manga_name, num_string, url)
+    zip_directory(manga.name, num_string, url)
     # Manga has been updated, so update the last updated date
     manga.last_updated = datetime.utcnow()
     # Add and commit to the database
     db.session.add(new_chapter)
     db.session.commit()
 
-def make_zip_filename(manga_name, chapter_num):
-    return manga_name.replace(" ", "_").lower() + "-chapter" + chapter_num
+def make_zip_filename(manga, chapter_num):
+    return manga.name.replace(" ", "_").lower() + "-chapter" + chapter_num
 
-def zip_directory(manga_name, chapter_num, url):
+def zip_directory(manga, chapter_num, url):
     directory = application.config['UPLOAD_FOLDER'] + url + "/"
-    filename = make_zip_filename(manga_name, chapter_num)
+    filename = make_zip_filename(manga, chapter_num)
     # To make sure there is no recursive compression
     shutil.make_archive(directory + "../" + filename, "zip", directory)
     shutil.move(directory + "../" + filename + ".zip",
@@ -217,11 +216,11 @@ def store_files_into_hash(chapter_hash, files):
         for f in sorted(files.getlist(key), key=key_func):
             chapter_hash[key]["pages"].append(f)
 
-def add_all_chapters(manga_name, chapter_hash):
+def add_all_chapters(manga, chapter_hash):
     best_index = 0
     key_func = lambda index: float(chapter_hash[index]["num"])
     for index in sorted(chapter_hash.keys(), key=key_func):
-        add_chapter(manga_name, chapter_hash[index]["name"],
+        add_chapter(manga, chapter_hash[index]["name"],
             chapter_hash[index]["num"],
             chapter_hash[index]["pages"])
         best_index = index
@@ -230,7 +229,7 @@ def add_all_chapters(manga_name, chapter_hash):
         latest_chapter = str(chapter_hash[best_index]["num"])
         url = request.url_root[:-1]
         url += url_for("view_page", manga=manga.url, chapter=latest_chapter)
-        text = manga_name + " has been updated! Chapter "
+        text = manga.name + " has been updated! Chapter "
         text += latest_chapter + " - " + url
         twitter_api.update_status(status=text)
 
@@ -380,7 +379,7 @@ def add_chapter_bulk():
     manga = Manga.query.filter_by(name=manga_name).first()
     init_chapter_hash(chapter_hash, request.form)
     store_files_into_hash(chapter_hash, request.files)
-    add_all_chapters(manga_name, chapter_hash)
+    add_all_chapters(manga, chapter_hash)
     # Return back to the original page
     return redirect(url_for("view_manga", manga=manga.url))
 
