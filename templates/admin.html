@@ -1,11 +1,11 @@
 {% extends "banner_base.html" %}
 {% block real_content %}
 
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
-
   <div id="main_wrapper">
+
+    {% if error %}
+      <div class=error><strong>Error: </strong>{{ error }}</div>
+    {% endif %}
 
     <div class="heading"><span>Add Manga</span></div>
 

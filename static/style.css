@@ -569,3 +569,13 @@ img.chapter_admin_box {
 	margin: 2.5em auto 1em;
 	box-shadow: 0 0 5px rgba(32, 32, 32, 1.0);
 }
+
+/* Error Text */
+
+div.error {
+	text-align: center;
+	margin: 0 0 1em 0;
+	padding: 0.5em 0;
+	background-color: rgba(255, 192, 192, 1.0);
+	border: 1px solid rgba(255, 160, 160, 1.0);
+}
