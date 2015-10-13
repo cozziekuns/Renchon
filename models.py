@@ -10,13 +10,13 @@ db = SQLAlchemy()
 class Manga(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), index=True, unique=True)
-    url = db.Column(db.String(100), unique=True)
-    author = db.Column(db.String(50), index=True)
-    artist = db.Column(db.String(50), index=True)
-    status = db.Column(db.String(20))
-    cover = db.Column(db.String(150))
-    description = db.Column(db.String(1000))
+    name = db.Column(db.String, index=True, unique=True)
+    url = db.Column(db.String, unique=True)
+    author = db.Column(db.String, index=True)
+    artist = db.Column(db.String, index=True)
+    status = db.Column(db.String)
+    cover = db.Column(db.String)
+    description = db.Column(db.String)
     last_updated = db.Column(db.DateTime)
 
     def __init__(self, name, url, author, artist, status, cover, description):
@@ -39,7 +39,7 @@ class Manga(db.Model):
 class Chapter(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String)
     num = db.Column(db.Float)
     date_added = db.Column(db.DateTime)
     manga_id = db.Column(db.Integer, db.ForeignKey("manga.id"))
@@ -63,7 +63,7 @@ class Page(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     num = db.Column(db.Integer)
-    image = db.Column(db.String(150))
+    image = db.Column(db.String)
     chapter_id = db.Column(db.Integer, db.ForeignKey("chapter.id"))
     chapter = db.relationship("Chapter",
                               backref=db.backref("pages", lazy="dynamic"))
