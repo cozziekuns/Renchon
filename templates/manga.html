@@ -49,6 +49,7 @@
              ondragover="allow_drop(event)">Drag and drop chapters here.</div>
         <ul id="chapter_list"></ul>
       </div>
+      <div id="chapter_error" class="error"></div>
       <div id="chapter_submit"></div>
     {% endif %}
 
@@ -86,6 +87,7 @@
 
   {% if session.logged_in %}
     <script type="text/javascript">
+      var curr_chapter_nums = {{ chapter_nums }};
       var manga_name = "{{ manga }}";
       var edit_manga_path = "{{ url_for('edit_manga') }}";
       var add_chapter_path = "{{ url_for('add_chapter_bulk') }}";

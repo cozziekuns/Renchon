@@ -432,6 +432,7 @@ def index():
 def view_manga(manga=None):
     chapter_list = []
     chapter_urls = []
+    chapter_nums = []
     date_str = []
 
     # Redirect to the index
@@ -445,6 +446,7 @@ def view_manga(manga=None):
 
     cover_url = "/" + manga.cover
     for chapter in manga.chapters.order_by("num desc"):
+        chapter_nums.append(chapter.num)
         chapter_num = chapter_to_string(float(chapter.num))
         chapter_list.append("Chapter %s: %s" % (chapter_num, chapter.name))
         chapter_urls.append(url_for("view_page", manga=manga.url,
@@ -454,7 +456,7 @@ def view_manga(manga=None):
             date.year % 100))
 
     return render_template("manga.html", manga=manga.name, author=manga.author,
-            artist=manga.artist, cover_url=cover_url,
+            artist=manga.artist, cover_url=cover_url, chapter_nums=chapter_nums,
             description=manga.description, chapter_list=chapter_list,
             chapter_urls=chapter_urls, date_str=date_str)
 

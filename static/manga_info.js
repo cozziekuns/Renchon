@@ -68,8 +68,11 @@ function delete_chapter(manga, chapter) {
 /* Drag and Drop */
 
 var form_data = null;
+var form_data_success = false;
 var chapter_data = {};
+var current_unused_chapter = 0;
 var total_pages = {};
+var error_div = document.getElementById("chapter_error")
 
 function allow_drop(event) {
   event.preventDefault();
@@ -96,25 +99,20 @@ function drop_chapter(event) {
 function traverse_filesystem(entry) {
   var reader = entry.createReader();
   var chapter_num = get_chapter_from_url(entry.fullPath);
-  if (chapter_num >= 0) {
-    if (!chapter_data.hasOwnProperty(chapter_num)) {
-      chapter_data[chapter_num] = [];
-      total_pages[chapter_num] = 0;
-    } else {
-      // Disallow duplicate chapters
-      return;
-    }
+  if (!chapter_data.hasOwnProperty(chapter_num)) {
+    chapter_data[chapter_num] = [];
+  } else {
+    // Disallow duplicate chapters
+    return;
   }
   reader.readEntries(function(entries) {
-    var len = entries.length;
-    if (chapter_num >= 0) {
-      total_pages[chapter_num] += len;
-    }
-    for (var i = 0; i < len; i++) {
-      if (entries[i].isFile && chapter_num >= 0) {
+    total_pages[chapter_num] = entries.length;
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].isFile) {
         enter_into_chapter_data(entries[i], chapter_num);
       } else if (entries[i].isDirectory) {
-        traverse_filesystem(entries[i]);
+        // Skip directories (hello __MACOSX)
+        total_pages[chapter_num] -= 1;
       }
     }
   });
@@ -124,11 +122,9 @@ function enter_into_chapter_data(entry, chapter_num) {
   entry.file(function(file) {
     chapter_data[chapter_num].push(file);
     if (chapter_data[chapter_num].length == total_pages[chapter_num]) {
-      console.log(chapter_num + " finished parsing.");
       add_chapter_element(chapter_num);
     }
     if (ready_to_submit()) {
-      console.log("Ready to submit!");
       add_submit_element();
     }
   });
@@ -201,7 +197,11 @@ function add_chapter_info_to_element(element, chapter_num) {
   var num_name = "chapter_num_" + chapter_num.toString();
   var num_string = "Chapter Number: ";
   var name_name = "chapter_name_" + chapter_num.toString();
-  add_input_to_element(display, "number", num_name, num_string, chapter_num);
+  if (chapter_num >= 0) {
+    add_input_to_element(display, "number", num_name, num_string, chapter_num);
+  } else {
+    add_input_to_element(display, "number", num_name, num_string);
+  }
   add_input_to_element(display, "text", name_name, "Chapter Name: ");
   element.appendChild(display);
 }
@@ -233,7 +233,8 @@ function get_chapter_from_url(url) {
   if (result) {
     return Number(result[1]);
   } else {
-    return -1;
+    current_unused_chapter -= 1;
+    return current_unused_chapter;
   }
 }
 
@@ -247,11 +248,25 @@ function add_chapter_info_to_form() {
   for (var property in chapter_data) {
     var num = document.getElementsByName("chapter_num_" + property)[0].value;
     var name = document.getElementsByName("chapter_name_" + property)[0].value;
+    if (num == "") {
+      var message = "<strong>Error:</strong> "
+      message += " Chapter Number not specified for " + name + ".<br>";
+      error_div.innerHTML += message;
+      error_div.style.display = "block";
+      continue;
+    } else if (curr_chapter_nums.indexOf(Number(num)) > -1) {
+      var message = "<strong>Error:</strong> "
+      message += "Chapter " + num + " already exists.<br>";
+      error_div.innerHTML += message;
+      error_div.style.display = "block";
+      continue;
+    }
     form_data.append("chapter_num_" + property, num);
     form_data.append("chapter_name_" + property, name);
     for (var i = 0; i < chapter_data[property].length; i++) {
       form_data.append(property.toString(), chapter_data[property][i]);
     }
+    form_data_success = true;
   }
 }
 
@@ -262,29 +277,43 @@ function upload_chapters() {
   var request = new XMLHttpRequest();
   var submit_span = document.getElementById("chapter_submit_button");
   submit_span.className = "chapter_upload";
-  request.open('POST', '/add_chapter');
-  request.onload = function() {
-    text = "Chapters have been updated!"
-    text += " Please refresh the page to see the updates.";
-    submit_span.innerHTML = text;
-  };
-  request.upload.onprogress = function(event) {
-    if (event.lengthComputable) {
-      var complete = (event.loaded / event.total * 100 | 0);
-      if (complete == 100) {
-        text = "Upload complete! Girls do their best now and are preparing.";
-        text += " Please wait warmly until the server is ready...";
-        submit_span.innerHTML = text;
-      } else {
-        submit_span.innerHTML = "Uploaded: " + complete + "%";
+  if (form_data_success) {
+    request.open('POST', '/add_chapter');
+    request.onload = function() {
+      text = "Chapters have been updated!"
+      text += " Please refresh the page to see the updates.";
+      submit_span.innerHTML = text;
+    };
+    request.upload.onprogress = function(event) {
+      if (event.lengthComputable) {
+        var complete = (event.loaded / event.total * 100 | 0);
+        if (complete == 100) {
+          text = "Upload complete! Girls do their best now and are preparing.";
+          text += " Please wait warmly until the server is ready...";
+          submit_span.innerHTML = text;
+          clear_chapter_elements();
+        } else {
+          submit_span.innerHTML = "Uploaded: " + complete + "%";
+        }
       }
     }
+    submit_span.innerHTML = "Uploaded: 0%";
+    request.send(form_data);
+  } else {
+    var message = "<strong>No files were uploaded to the server.</strong><br>";
+    error_div.innerHTML += message;
+    error_div.style.display = "block";
+    submit_span.style.display = "none";
+    clear_chapter_elements();
   }
-  submit_span.innerHTML = "Uploaded: 0%";
-  request.send(form_data);
 }
 
 /* General Helper Methods */
+
+function clear_chapter_elements() {
+  var chapter_list = document.getElementById("chapter_list");
+  chapter_list.innerHTML = "";
+}
 
 function create_proxy_form(path, params) {
   var form = document.createElement("form");

@@ -579,3 +579,7 @@ div.error {
 	background-color: rgba(255, 192, 192, 1.0);
 	border: 1px solid rgba(255, 160, 160, 1.0);
 }
+
+div#chapter_error {
+	display: none;
+}
